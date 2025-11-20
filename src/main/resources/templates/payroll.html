@@ -8,20 +8,62 @@
     <title>KWIX | Payroll</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+			class="arrow">←
+		</a>
 		<h2>Manage Payroll</h2>
 		<a class="del arrow smaller" href="/deletedpaystubs">Recently Deleted →</a>
 		<hr />
 		<div>
+			<div class="filter-fields">
+				<label>Employee Name:</label>
+				<input type="text" class="filter-input" />
+				<label>Day Worked:</label>
+				<input type="text" class="filter-input" />
+				<label>Jobsite Worked:</label>
+				<input type="text" class="filter-input" />
+				<label>Pay:</label>
+				<input type="text" class="filter-input date" />
+				<label>Hours Worked:</label>
+				<input type="text" class="filter-input date" />
+				<label>Entered:</label>
+				<input type="text" class="filter-input date" />
+				<label>Last Modified:</label>
+				<input type="text" class="filter-input date" />
+				<p id="searchError" style="display: none;">No records could be found...</p>
+			</div>
+			<h3>Paystubs:</h3>
+			<div th:if="${paystubs.isEmpty()}">No paystubs found...</div>
+			<div th:unless="${paystubs.isEmpty()}">
+				<table id="filter-tb-payroll" class="payroll-tb">
+					<tr class="header">
+						<th>Employee</th>
+						<th>Day Worked</th>
+				        <th>Jobsite Worked</th>
+						<th>Pay</th>
+						<th>Hours Worked</th>
+				        <th>Entered</th>
+				        <th>Last Modified</th>
+				        <th>Edit</th>
+				    </th>
+				    <tr th:unless="${paystubs.isEmpty()}" th:each="paystub : ${paystubs}">
+						<td th:text="${paystub.fullName}"></td>
+						<td th:text="${payrollCtrlr.formatedDate(paystub.dayWorked)}"></td>
+						<td th:text="${paystub.jobsite}"></td>
+						<td th:text="${paystub.pay}"></td>
+						<td th:text="${paystub.hoursWorked}"></td>
+				        <td th:text="${paystub.createAt}"></td>
+				        <td th:text="${paystub.updateAt}"></td>
+				        <td class="edit-td"><a th:href="@{/paystub/{id}(id=${paystub.paystubNum})}" class="edit">✏</a></td>
+				    </tr>
+				</table>
+			</div>
 			<h3>Employees:</h3>
-			<table>
-			    <tr>
+			<table id="filter-tb-emp" class="payroll-tb">
+			    <tr class="header">
 			        <th>Id</th>
 			        <th>Name</th>
 			        <th>Phone</th>
@@ -48,34 +90,11 @@
 			        <td class="edit-td"><a th:href="@{paystubs/{id}(id=${employee.id})}" class="edit">+</a></td>
 			    </tr>
 			</table>
-			<h3>Paystubs:</h3>
-			<div th:if="${paystubs.isEmpty()}">No paystubs found...</div>
-			<div th:unless="${paystubs.isEmpty()}">
-				<table>
-					<tr>
-						<th>Employee</th>
-						<th>Day Worked</th>
-				        <th>Jobsite Worked</th>
-						<th>Pay</th>
-						<th>Hours Worked</th>
-				        <th>Entered</th>
-				        <th>Last Modified</th>
-				        <th>Edit</th>
-				    </tr>
-				    <tr th:unless="${paystubs.isEmpty()}" th:each="paystub : ${paystubs}">
-						<td th:text="${paystub.fullName}"></td>
-						<td th:text="${payrollCtrlr.formatedDate(paystub.dayWorked)}"></td>
-						<td th:text="${paystub.jobsite}"></td>
-						<td th:text="${paystub.pay}"></td>
-						<td th:text="${paystub.hoursWorked}"></td>
-				        <td th:text="${paystub.createAt}"></td>
-				        <td th:text="${paystub.updateAt}"></td>
-				        <td class="edit-td"><a th:href="@{/paystub/{id}(id=${paystub.id})}" class="edit">✏</a></td>
-				    </tr>
-				</table>
-				<button type="button" class="exp" th:onclick="alert('Not available in demo version. \nThis Feature is for paid users only...')">Export</button>
-			</div>
+			<button type="button" class="exp" th:onclick="alert('Not available in demo version. \nThis Feature is for paid users only.')">Export</button>
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
+	<script th:src="@{/js/filter.js}"></script>
   </body>
 </html>

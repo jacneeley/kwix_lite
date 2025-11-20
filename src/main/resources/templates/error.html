@@ -8,12 +8,7 @@
     <title th:text="'KWIX | ' + ${status}"></title>
   </head>
 	<body>
-		<nav>
-			<a href="/">KWIX</a>
-			<a href="/employees">Employees</a>
-			<a href="/payroll">Payroll</a>
-			<span class="ver" th:text="${ver}"></span>
-		</nav>
+		<nav></nav>
 		<div class="content">
 			<h2>Something went wrong</h2>
 			<table border="1">
@@ -21,5 +16,6 @@
 			    <tr><td>Status Code</td><td th:text="${status}"></td></tr>
 			</table>
 		</div>
+		<script th:src="@{/js/navComponent.js}"></script>
 	</body>
 </html>

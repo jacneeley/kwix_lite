@@ -30,4 +30,22 @@ public class ErrorObject {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
+	
+	public ErrorObject(){
+		super();
+	}
+
+	/**
+	 * @param status
+	 * @param message
+	 * @param timestamp
+	 */
+	public ErrorObject(Integer status, String message, Date timestamp) {
+		super();
+		this.status = status;
+		this.message = message;
+		this.timestamp = timestamp;
+	}
+	
+	
 }

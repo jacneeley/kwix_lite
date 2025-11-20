@@ -8,46 +8,50 @@
     <title>KWIX | Home</title>
   </head>
 	<body>
-		<nav>
-			<a href="/">KWIX</a>
-			<a href="/employees">Employees</a>
-			<a href="/payroll">Payroll</a>
-			<span class="ver" th:text="${ver}"></span>
-		</nav>
+		<nav></nav>
 		<div class="content">
 			<div>
 				<h2>Dashboard</h2>
 				<hr />
-				<div class="home">
-					<h3>Welcome to Kwix</h3>
-					<p>Kwix is a simple employee + payroll management system designed for small business that wish to go paperless at a low cost.</p>
-					<p>Kwix is a pay once, user forever App. No Subscriptions! No Fees!</p>
-					<p>This is a demo version available to the public and is still a work in progress.</p>
-					<p>This is a public ALPHA build and is not representative of the final product.</p>
-					<h3>DEMO Features:</h3>
-					<li><a href="/employees">Employee Management:</a></li>
-					<ul> - Create/Update/Delete Employees</ul>
-					<ul> - Set Employee Pay</ul>
-					<li><a href="/payroll">Payroll Management:</a></li>
-					<ul> - Create/Update/Delete Paystubs For existing Employees</ul>
-					<ul> - Manage hours worked for each employee</ul>
-					<ul> - Calculate total pay (hours worked x employee hourly pay)</ul>
-					<ul> - View gross earnings for Employee</ul>
-					<!--<h3>Resources</h3>
-					<a>Help</a> -->
-					<h3>Interested In Full Access?</h3>
-					<ul> - Paid users have access to save their data.</ul>
-					<ul> - Save employee paystub history</ul>
-					<ul> - Download paystubs records for employees that work with any spreadsheet software (microsoft excel included)</ul>
-					<ul> - And more</ul>
-					<p>For free consulation and pricing, contact 
-						<a 
-						href="mailto:jakneeley@outlook.com?subject=Kwix Inquiry <insert your name/business here>">
-							jakneeley@outlook.com
-						</a>
+				<div class="sub-content">
+					<h2>Recent Changes</h2>
+					<h3>06/01/2025 - Search Page Update:</h3>
+					<p>
+						KWIX is nearing completion! Thank you for the support up until now.
+						As of this update I would say things are 95% complete. I say only 95% because I am a bit of a perfectionist.
+						Aside from small issues that you probably won't even notice, all of the core features are done.
+						From here on out there may be some User Interface changes and small fixes here and there.
 					</p>
+					<p>
+						What is new then? The <a href="/search">Search</a> page. 
+					</p>
+					<p>
+						This will allow users to query for specific records.
+						Employees, Payroll, and Jobsites allow for real-time filter but the search page will allow to look up records across all 3 pages in one place.
+						Why was this included? The filters on each individual page are merely quick searches, the Search page will allow for more robost searches.
+						For example you could query the database to show all paystubs for a specific jobsite. That could be pretty useful. You can create all kinds of <a href="/search">Search</a> combinations on the Search page.
+					</p>
+					<p>Read the <a href="/help#search">Search</a> page Documentation.</p>
+					<h3>11/8/2024 - The Jobsite Update:</h3>
+					<p>Introducing the <a href="/jobsites">Jobsites</a> page</p>
+					<p>Manage Jobsites:</p>
+					<ul>
+						<li>Review Jobsites</li>
+						<li>Create New Jobsites</li>
+						<li>Update current Jobsites</li>
+						<li>Remove old Jobsites</li>
+					</ul>
+					<p>Read the <a href="/help#jobsites">Jobsite Documentation</a>.</p>
+					<p>
+						A Help page was added to guide users on how to use KWIX.
+						Refer to the link below or the link in the nav above.
+					</p>
+					<h3>Resources</h3>
+					<a href="/help">Help</a>
+					<a href="mailto:jakneeley@outlook.com">Contact</a>
 				</div>
 			</div>
 		</div>
+		<script th:src="@{/js/navComponent.js}"></script>
 	</body>
 </html>

@@ -3,7 +3,7 @@ package local.payrollapp.simplepayroll.paystub;
 import java.time.LocalDate;
 
 public record PaystubResponse(
-		String id,
+		String paystubNum,
 		String employeeId,
 		String fullName,
 		String jobsite,

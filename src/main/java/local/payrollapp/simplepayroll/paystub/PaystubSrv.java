@@ -1,18 +1,14 @@
 package local.payrollapp.simplepayroll.paystub;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaystubSrv implements IPaystubSrv{
 	
-	private final PaystubRepo _stubRepo;
-	private static HashMap<String, Paystub> _paystubs = new HashMap<String, Paystub>(); 
+	private final PaystubRepo _stubRepo; 
 	
 	PaystubSrv(PaystubRepo stubRepo){
 		this._stubRepo = stubRepo;
@@ -28,8 +24,6 @@ public class PaystubSrv implements IPaystubSrv{
 	
 	@Override
 	public List<Paystub> getPaystubsForEmployee(String id) {
-//		List<Paystub> paystubs = new ArrayList<Paystub>(_paystubs.values());
-//		return paystubs;
 		return _stubRepo.findEmployeePaystubsByActive(id, true);
 	}
 	
@@ -49,7 +43,6 @@ public class PaystubSrv implements IPaystubSrv{
 
 	@Override
 	public void CreatePaystub(Paystub paystub) {
-//		_paystubs.put(paystub.getId(), paystub);
 		Paystub stub = new Paystub(
 				paystub.generateId(),
 				paystub.getEmployeeId(),
@@ -66,16 +59,20 @@ public class PaystubSrv implements IPaystubSrv{
 
 	@Override
 	public void UpdatePaystub(Paystub paystub) {
-		_stubRepo.UpdatePaystub(paystub, paystub.getId());
+		_stubRepo.UpdatePaystub(paystub, paystub.getPaystubNum());
 	}
 	
 	@Override
 	public void UpdatePaystubs(Paystub paystub) {//update paystubs in bulk to maintain history if employee id changes.
-		_stubRepo.UpdatePaystubs(paystub, paystub.getId());
+		_stubRepo.UpdatePaystubs(paystub, paystub.getPaystubNum());
 	}
 
 	@Override
 	public void DeletePaystub(String id) {
 		_stubRepo.DeletePaystub(id);
+	}
+	
+	public void clear() {
+		this._stubRepo.clear();
 	}
 }

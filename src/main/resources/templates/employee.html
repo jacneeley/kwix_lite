@@ -8,18 +8,20 @@
     <title>KWIX | Employee Data Entry</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
-		<a href="/employees" class="arrow">←</a>
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+			class="arrow">←
+		</a>
 		<h2 th:text="'Manage ' +${employee.getFullName()}"></h2>
 		<hr />
 		<div>
 			<div th:if="${userMessage}" th:utext="${userMessage}" ></div>
+			<div class="error" th:if="${isError}">
+				<p>Error(s) Occurred:</p>
+				<ul th:each="err: ${errMessages}" th:text="${err}"></ul>
+			</div>
 			<div class=form>
 				<form method="post" th:action="@{/employee/{id}(id=${employee.id})}" th:object="${employee}">
 				    <label>First Name:</label>
@@ -27,7 +29,7 @@
 					<label>Last Name:</label>
 					<input id="lastName" placeholder="Enter Last Name" required th:field="*{lastName}" th:value="${employee.lastName()}" type="text"/>
 					<label>Phone:</label>
-					<input id="phone" placeholder="Phone" required th:field="*{phone}" th:value="${employee.phone()}" type="text"/>
+					<input id="phone" placeholder="###-###-####" th:field="*{phone}" th:value="${employee.phone()}" type="text"/>
 					<label>Pay:</label>
 					<input id="pay" placeholder="Pay" required th:field="*{pay}" th:value="${employee.pay()}" type="text"/>
 					<input id="activeFlg" type="hidden" th:field="*{active}" value ="true">
@@ -40,5 +42,7 @@
 			</div>		
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
   </body>
 </html>

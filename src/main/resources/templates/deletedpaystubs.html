@@ -8,14 +8,9 @@
     <title>KWIX | Recently Deleted Paystubs</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
-	<a href="/payroll" class="arrow">←</a>
+	<a th:href="@{{id}(id=${prevPage})}" class="arrow">←</a>
 		<h2>Recently Deleted Paystubs</h2>
 		<hr />
 		<p>**<span style="color:#cc2900;">CAUTION:</span> Deleting a Paystub here is permanent!**</p>
@@ -54,5 +49,7 @@
 			</table>
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/navComponent.js}"></script>
   </body>
 </html>

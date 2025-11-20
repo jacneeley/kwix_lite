@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import local.payrollapp.simplepayroll.GlobalConstants;
+
 @Service
 public class DeleteFiles {
 	private static final Logger log = LoggerFactory.getLogger(DeleteFiles.class);
@@ -32,18 +34,32 @@ public class DeleteFiles {
 	
 	public void deleteFiles() {
 		log.info("Checking for stale files...");
-		File dir = new File(System.getProperty("user.dir") + "/src/main/resources/static/sheets/");
+		String path = GlobalConstants.TMP;
+		File dir = new File(path);
 		if(dir.isDirectory()) {
 			File[] files = dir.listFiles();
-			if (!Integer.valueOf(files.length).equals(0)){
-				for (File f : files) {
-					deleteFile(dir.toString(), f.getName());
-				}
-				log.info("Files Cleared!");
+			if (Integer.valueOf(files.length).equals(0)) {
+				log.warn("tmp folder was empty...");
+				log.warn("'dummy' file was missing, this may cause 'export' function to fail.");
+				return;
 			}
-			else {
+			
+			if (Integer.valueOf(files.length).equals(1)){
 				log.info("No files to delete.");
+				return;
 			}
+			
+			if (Integer.valueOf(files.length) > 1){
+				for (File f : files) {
+					if(!f.getName().equals("dummy.txt")) {
+						deleteFile(dir.toString(), f.getName());
+						log.info("Files Cleared!");
+					}	
+				}
+			}
+		}
+		else {
+			log.warn("data/sheets/ dir could not be found...");
 		}
 	}
 }

@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import local.payrollapp.simplepayroll.paystub.Paystub;
 import local.payrollapp.simplepayroll.paystub.PaystubSrv;
-import local.payrollapp.simplepayroll.view.ViewController;
+import local.payrollapp.simplepayroll.view.AppController;
 
 @Service
 public class EmployeeSrv implements IEmpSrv{
 	
 	private final EmployeeRepo _empRepo;
 	private final PaystubSrv _stubSrv;
-	private static final Logger log = LoggerFactory.getLogger(EmployeeSrv.class);
+	//private static final Logger log = LoggerFactory.getLogger(EmployeeSrv.class);
 	
 	public EmployeeSrv(EmployeeRepo empRepo, PaystubSrv stubSrv) {
 		this._empRepo = empRepo;
@@ -82,7 +82,7 @@ public class EmployeeSrv implements IEmpSrv{
 				if(!empStubs.isEmpty()) {
 					for(Paystub stub : empStubs) {
 						Paystub updatedStub = new Paystub(
-								stub.getId(),
+								stub.getPaystubNum(),
 								employee.generateId(),
 								stub.getFullName(),
 								stub.getJobsite(),
@@ -105,13 +105,17 @@ public class EmployeeSrv implements IEmpSrv{
 		_empRepo.DeleteEmployee(id);
 	}
 	
-	@PostConstruct 
-	private void init() {
-		Employee emp = new Employee("John", "Smith", "999-999-9999", 99.99, true, LocalDate.now(), LocalDate.now());
-		Employee emp2 = new Employee("Adam", "Smith", "888-888-8888", 99.99, false, LocalDate.now(), LocalDate.now());
-		this.createEmp(emp);
-		log.info("created: " + emp.toString());
-		this.createEmp(emp2);
-		log.info("created: " + emp2.toString());
+	public void clear() {
+		_empRepo.clear();
 	}
+	
+	// @PostConstruct 
+	// private void init() {
+	// 	Employee emp = new Employee("Arthur", "Sparks", "999-999-9999", 99.99, true, LocalDate.now(), LocalDate.now());
+	// 	Employee emp2 = new Employee("Jacob", "Neeley", "888-888-8888", 99.99, false, LocalDate.now(), LocalDate.now());
+	// 	this.createEmp(emp);
+	// 	// log.info("created: " + emp.toString());
+	// 	this.createEmp(emp2);
+	// 	// log.info("created: " + emp2.toString());
+	// }
 }
