@@ -23,7 +23,7 @@ public class PayrollRepoTests {
 	private PaystubRepo stubRepo = new PaystubRepo(mockDb);
 	
 	@Test
-	public void PaystubRepo_CreatePaystub_FindByIdAndActive() {
+	public void PaystubRepo_CreatePaystub_FindByIdAndActive() throws Exception {
 		String id = UUID.randomUUID().toString();
 		Paystub stub = new Paystub(
 				id,
@@ -41,7 +41,7 @@ public class PayrollRepoTests {
 	}
 	
 	@Test
-	public void PaystubRepo_UpdatePaystubANDSoftDelete() {
+	public void PaystubRepo_UpdatePaystubANDSoftDelete() throws Exception {
 		String id = UUID.randomUUID().toString();
 		Paystub stub = new Paystub(
 				id,
@@ -80,7 +80,7 @@ public class PayrollRepoTests {
 	}
 	
 	@Test
-	public void PaystubRepo_DeletePaystub() {
+	public void PaystubRepo_DeletePaystub() throws Exception {
 		String id = UUID.randomUUID().toString();
 		Paystub stub = new Paystub(
 				id,

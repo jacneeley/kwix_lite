@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import local.payrollapp.simplepayroll.SimplePayroll;
 import local.payrollapp.simplepayroll.exceptions.ElementNotFoundException;
 
 @Controller
@@ -64,6 +63,7 @@ public class PayrollController {
 	}
 	
 	public PaystubResponse createPaystub(PaystubRequest request) {
+		
 		Paystub newStub = new Paystub(
 				"",
 				request.getEmployeeId(),
@@ -148,8 +148,8 @@ public class PayrollController {
 	
 	private LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
 	    return dateToConvert.toInstant()
-	      .atZone(ZoneId.systemDefault())
-	      .toLocalDate();
+				      .atZone(ZoneId.systemDefault())
+				      .toLocalDate();
 	}
 	
 	public double roundMoney(double money) {

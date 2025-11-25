@@ -238,7 +238,6 @@ public class AppControllerTests {
 		.andExpect(redirectedUrl("/employees"));
 	}
 	
-	//TODO: write some tests for jobsite and paystub and call it a day
 	@Test
 	@WithMockUser
 	public void View_CreateJobsite_RedirectToCreated() throws Exception {
@@ -281,7 +280,7 @@ public class AppControllerTests {
 		response.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/employees"));
 		
-		/*create dependencies for paystub */
+		/*test dependencies for paystub */
 		//jobsite
 		when(jobsiteController.createJobsite(ArgumentMatchers.any(JobsiteRequest.class))).thenReturn(jobsiteResp);
 		

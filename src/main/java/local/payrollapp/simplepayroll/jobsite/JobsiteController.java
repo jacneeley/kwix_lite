@@ -18,7 +18,7 @@ public class JobsiteController {
 	private final JobsiteSrv _jobsiteSrv;
 	private static final Logger log = LoggerFactory.getLogger(JobsiteController.class);
 	
-	JobsiteController(JobsiteSrv jobsiteSrv){
+	public JobsiteController(JobsiteSrv jobsiteSrv){
 		this._jobsiteSrv = jobsiteSrv;
 	}
 	

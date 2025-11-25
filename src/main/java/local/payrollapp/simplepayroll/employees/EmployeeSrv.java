@@ -11,12 +11,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import local.payrollapp.simplepayroll.exceptions.ElementNotFoundException;
 import local.payrollapp.simplepayroll.paystub.Paystub;
 import local.payrollapp.simplepayroll.paystub.PaystubSrv;
 import local.payrollapp.simplepayroll.view.AppController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class EmployeeSrv implements IEmpSrv{
+	private static final Logger log = LoggerFactory.getLogger(EmployeeSrv.class);
+	
 	
 	private final EmployeeRepo _empRepo;
 	private final PaystubSrv _stubSrv;
@@ -29,46 +35,73 @@ public class EmployeeSrv implements IEmpSrv{
 	
 	@Override
 	public List<Employee> getAllEmps() {
-//		List<Employee> emps = new ArrayList<Employee>(_employees.values());
-//		return emps;
-		return _empRepo.findAllByActive(true);
+		try {
+			return _empRepo.findAllByActive(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("No employees were found.");
+		}
 	}
 	
 	@Override
 	public Optional<Employee> getEmp(String id) {
-		return _empRepo.findByIdAndActive(id, true);
+		try {
+			return _empRepo.findByIdAndActive(id, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("no employee was found for the given criteria.");
+		}
 	}
 	
 	@Override
 	public Optional<Employee> getInactiveEmp(String id){
-		return _empRepo.findByIdAndActive(id, false);
+		try {
+			return _empRepo.findByIdAndActive(id, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("no employee was found for the given criteria.");
+		}
 	}
 	
 	@Override
 	public List<Employee> getAllDeletedEmps() {
-		return _empRepo.findAllByActive(false);
+		try {
+			return _empRepo.findAllByActive(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("no employeee were found for the given criteria.");
+		}
 	}
 
 	@Override
 	public void createEmp(Employee employee) {
-		Employee emp = new Employee(
-				employee.generateId(),
-				employee.getfirstName(),
-				employee.getlastName(),
-				employee.getPhone(),
-				employee.getPay(),
-				employee.isActive(),
-				employee.getCreateAt(),
-				employee.getUpdateAt());
-		_empRepo.CreateEmployee(emp);
+		try {
+			Employee newEmpWithGeneratedId = new Employee(
+					employee.generateId(),
+					employee.getfirstName(),
+					employee.getlastName(),
+					employee.getPhone(),
+					employee.getPay(),
+					employee.isActive(),
+					employee.getCreateAt(),
+					employee.getUpdateAt());
+			employee = null;
+			_empRepo.CreateEmployee(newEmpWithGeneratedId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			log.error("employeeId or employee was null.");
+		}
 	}
 
 	@Override
 	public void updateEmp(String oldId, Employee employee){
 		try {
 			String oldPhone = _empRepo.findById(employee.getId()).get().getPhone();
-			
-			
 			if(employee.getPhone().equals(oldPhone)) {
 				_empRepo.UpdateEmployee(employee, employee.getId());
 			}
@@ -96,13 +129,23 @@ public class EmployeeSrv implements IEmpSrv{
 					}
 				}
 			}
-		} 
-		catch(NoSuchElementException ex) {}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("no employee was found for the given criteria.");
+		}
 	}
 
 	@Override
 	public void deleteEmp(String id) {
-		_empRepo.DeleteEmployee(id);
+		try {
+			_empRepo.DeleteEmployee(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("could not delete employee because employeeId was invalid.");
+		}
 	}
 	
 	public void clear() {

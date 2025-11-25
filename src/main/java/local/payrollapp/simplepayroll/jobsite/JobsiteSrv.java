@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import local.payrollapp.simplepayroll.exceptions.ElementNotFoundException;
+import local.payrollapp.simplepayroll.paystub.PaystubSrv;
 
 @Service
 public class JobsiteSrv implements IJobsiteSrv{
-	
+	private static final Logger log = LoggerFactory.getLogger(JobsiteSrv.class);
 	private final JobsiteRepo _jobsiteRepo;
 	
 	JobsiteSrv(JobsiteRepo jobsiteRepo){
@@ -20,12 +24,24 @@ public class JobsiteSrv implements IJobsiteSrv{
 	
 	@Override
 	public Optional<Jobsite> findJobsiteById(String id, boolean active) {
-		return _jobsiteRepo.findJobsiteById(id, active);
+		try {
+			return _jobsiteRepo.findJobsiteById(id, active);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 
 	@Override
 	public List<Jobsite> findAllJobsitesByActive(boolean active) {
-		return _jobsiteRepo.findAllJobsitesByActive(active);
+		try {
+			return _jobsiteRepo.findAllJobsitesByActive(active);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 
 	@Override
@@ -37,17 +53,35 @@ public class JobsiteSrv implements IJobsiteSrv{
 				jobsite.isActive(),
 				jobsite.getCreatedAt(),
 				jobsite.getUpdatedAt());
-		_jobsiteRepo.CreateJobsite(js);
+		try {
+			_jobsiteRepo.CreateJobsite(js);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 
 	@Override
 	public void UpdateJobsite(Jobsite jobsite) {
-		_jobsiteRepo.UpdateJobsite(jobsite, jobsite.getId());
+		try {
+			_jobsiteRepo.UpdateJobsite(jobsite, jobsite.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 
 	@Override
 	public void DeleteJobsite(String id) {
-		_jobsiteRepo.DeleteJobsite(id);
+		try {
+			_jobsiteRepo.DeleteJobsite(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 	
 	public List<String> getJobsiteNames() {
@@ -62,26 +96,4 @@ public class JobsiteSrv implements IJobsiteSrv{
 	public void clear() {
 		this._jobsiteRepo.clear();
 	}
-	
-//	@PostConstruct
-//	private void init() {
-//		boolean isEmpty = this.findAllJobsitesByActive(true).isEmpty();
-//		
-//		if(isEmpty) {
-//			String[] siteNames = {
-//					"HATHAWAY","CATINA","HIGHRD",
-//					"VASSAR","HIGHLAND","LENNOX","OTHER"
-//				};
-//			for(int i = 0; i < siteNames.length; i++) {
-//				Jobsite newSite = new Jobsite(
-//						"",
-//						siteNames[i],
-//						Boolean.FALSE,
-//						Boolean.TRUE,
-//						LocalDate.now(),
-//						LocalDate.now());
-//				this.CreateJobsite(newSite);
-//			}
-//		}
-//	}
 }

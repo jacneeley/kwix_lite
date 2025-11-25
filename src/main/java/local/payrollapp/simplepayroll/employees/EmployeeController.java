@@ -57,6 +57,7 @@ public class EmployeeController {
 				Boolean.TRUE,
 				LocalDate.now(),
 				LocalDate.now());
+		newEmp.generateId();
 		_empSrv.createEmp(newEmp);
 		EmployeeResponse response = getResponse(newEmp);
 		return response;

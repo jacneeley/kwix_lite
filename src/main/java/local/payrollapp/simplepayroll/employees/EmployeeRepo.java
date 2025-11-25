@@ -1,14 +1,12 @@
 package local.payrollapp.simplepayroll.employees;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.Assert;
+
 
 import local.payrollapp.simplepayroll.components.MockDatabase;
 
@@ -22,12 +20,12 @@ public class EmployeeRepo implements IEmployeeRepo {
 	}
 	
 	@Override
-	public Optional<Employee> findById(String id) {
-		return Optional.of(_mockDB.getEmployees().get(id));
+	public Optional<Employee> findById(String id) throws Exception {
+		return Optional.ofNullable(_mockDB.getEmployees().get(id));
 	}
 	
 	@Override
-	public List<Employee> findAllByActive(boolean active) {
+	public List<Employee> findAllByActive(boolean active) throws Exception {
 		List<Employee> allActive = _mockDB.getEmployees().entrySet()
 				.stream()
 				.filter(e -> e.getValue().isActive() == active)
@@ -40,8 +38,12 @@ public class EmployeeRepo implements IEmployeeRepo {
 	}
 
 	@Override
-	public Optional<Employee> findByIdAndActive(String id, boolean active) {
+	public Optional<Employee> findByIdAndActive(String id, boolean active) throws Exception {
 		Employee emp = _mockDB.getEmployees().get(id);
+		if(emp == null) {
+			return Optional.empty();
+		}
+		
 		if(emp.isActive() == active) {
 			return Optional.of(emp);
 		}
@@ -49,17 +51,26 @@ public class EmployeeRepo implements IEmployeeRepo {
 	}
 
 	@Override
-	public void CreateEmployee(Employee employee) {
+	public void CreateEmployee(Employee employee) throws Exception {
+		if(employee == null || employee.getId() == null) {
+			throw new NullPointerException();
+		}
 		this._mockDB.getEmployees().put(employee.getId(), employee);
 	}
 
 	@Override
-	public void UpdateEmployee(Employee employee, String id) {
+	public void UpdateEmployee(Employee employee, String id) throws Exception {
+		if(employee == null || id == null || id.isBlank()) {
+			throw new Exception();
+		}
 		this._mockDB.getEmployees().put(id, employee);
 	}
 
 	@Override
-	public void DeleteEmployee(String id) {
+	public void DeleteEmployee(String id) throws Exception {
+		if(id == null || id.isBlank()) {
+			throw new Exception();
+		}
 		this._mockDB.getEmployees().remove(id);
 	}
 	
