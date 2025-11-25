@@ -1,7 +1,7 @@
 (function() {
 	var navMenu = document.getElementsByTagName("nav")[0];
 	navMenu.innerHTML = `
-		<a style="font-size:30px; text-decoration:none;">KWIX<a>
+		<a style="font-size:30px; text-decoration:none;">KWIX LITE<a>
 		<a href="/">Home</a>
 		<a href="/employees">Employees</a>
 		<a href="/payroll">Payroll</a>
