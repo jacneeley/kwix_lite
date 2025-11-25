@@ -22,7 +22,7 @@ public class JobsiteRepoTests {
 	private JobsiteRepo jobsiteRepo = new JobsiteRepo(mockDb);
 	
 	@Test
-	public void createJobsite_ReturnJobsite() {
+	public void createJobsite_ReturnJobsite() throws Exception {
 		Long generatedId = 1000L + (long) (Math.random() * (10000L - 1000L));
 		Jobsite jobsite = new Jobsite(
 				generatedId.toString(),
@@ -38,7 +38,7 @@ public class JobsiteRepoTests {
 	}
 	
 	@Test
-	public void findAllActiveJobsites() {
+	public void findAllActiveJobsites() throws Exception {
 		Long generatedId = 1000L + (long) (Math.random() * (10000L - 1000L));
 		Jobsite jobsite = new Jobsite(
 				generatedId.toString(),
@@ -73,7 +73,7 @@ public class JobsiteRepoTests {
 	}
 	
 	@Test
-	public void jobsiteSoftDeleteAndUpdate() {
+	public void jobsiteSoftDeleteAndUpdate() throws Exception {
 		Long generatedId = 1000L + (long) (Math.random() * (10000L - 1000L));
 		Jobsite jobsite = new Jobsite(
 				generatedId.toString(),
@@ -99,7 +99,7 @@ public class JobsiteRepoTests {
 	}
 	
 	@Test
-	public void jobsiteDeletion() {
+	public void jobsiteDeletion() throws Exception {
 		Long generatedId = 1000L + (long) (Math.random() * (10000L - 1000L));
 		Jobsite jobsite = new Jobsite(
 				generatedId.toString(),
