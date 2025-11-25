@@ -22,7 +22,7 @@ public class EmployeeRepoTests {
 	private EmployeeRepo employeeRepo = new EmployeeRepo(mockDb);
 	
 	@Test
-	public void EmployeeRepo_SaveEmployee_ReturnEmployee() {
+	public void EmployeeRepo_SaveEmployee_ReturnEmployee() throws Exception {
 		Employee employee = new Employee(
 				"GH9999",
 				"George",
@@ -38,7 +38,7 @@ public class EmployeeRepoTests {
 	}
 	
 	@Test
-	public void EmployeeRepo_FindByIdAndActive() {
+	public void EmployeeRepo_FindByIdAndActive() throws Exception {
 		Employee employee1 = new Employee(
 				"GH9999",
 				"George",
@@ -66,7 +66,7 @@ public class EmployeeRepoTests {
 	}
 	
 	@Test
-	public void EmployeeRepo_DeleteEmployee_ReturnNull() {
+	public void EmployeeRepo_DeleteEmployee_ReturnNull() throws Exception {
 		Employee employee = new Employee(
 				"GH9999",
 				"George",
