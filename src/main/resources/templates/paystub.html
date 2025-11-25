@@ -35,7 +35,7 @@
 				<label>Hours Worked:</label>
 				<input id="hours" placeholder="0 Hrs" required th:field="*{hoursWorked}" type="text"/>
 				<label>Day:</label>
-				<input id="day" placeholder="mm/dd/yyyy" required th:field="*{dayWorked}" th:value="${paystub.dayWorked}" type="date"/>
+				<input id="day" placeholder="mm/dd/yyyy" required th:field="*{dayWorked}" type="text"/>
 				<input id="activeFlg" type="hidden" th:field="*{active}" value ="true">
 			    <input class="update btn-3" type="submit" value="Update"
 						onclick="document.getElementById('activeFlg').value='true'">

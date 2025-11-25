@@ -14,7 +14,7 @@
 		<div class="content">
 			<h1>Success</h1>
 			<div th:if="${!usrToken.equals(expired)}">
-				<p>One Time Token has been sent!</p>
+				<p>One Time Token has been created!</p>
 				<p>This link is only valid for 15 minutes.</p>
 				<a th:href="@{/login/ott?token={usrToken}(usrToken=${usrToken})}">login</a>
 			</div>

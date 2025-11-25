@@ -19,8 +19,10 @@
 					<p>Token could not be sent.</p>
 				</div>
 	            <form th:action="@{/login/ott}" method="POST">
-	                <label for="username">Username:</label>
+	                <label for="username">Verify you are human by typing "guest" below:</label>
 	                <input id="username" name="username" type="text" required/>
+					<div style="margin-top:1rem;"></div>
+					<label>Click the button to continue:</label>
 	                <input class="add btn" type="submit" value="Send One-Time Token">
 	            </form>
 	        </div>
