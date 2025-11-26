@@ -1,10 +1,12 @@
 package local.payrollapp.simplepayroll.components;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.ott.DefaultOneTimeToken;
 import org.springframework.security.authentication.ott.OneTimeToken;
 import org.springframework.security.web.authentication.ott.OneTimeTokenGenerationSuccessHandler;
 import org.springframework.security.web.authentication.ott.RedirectOneTimeTokenGenerationSuccessHandler;
@@ -30,6 +32,12 @@ public class OttsHandler implements OneTimeTokenGenerationSuccessHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, OneTimeToken oneTimeToken)
 			throws IOException, ServletException {
+		
+		oneTimeToken = new DefaultOneTimeToken(
+				oneTimeToken.getTokenValue(),
+				oneTimeToken.getUsername(),
+				oneTimeToken.getExpiresAt().plus(Duration.ofMinutes(25)));
+		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(UrlUtils.buildFullRequestUrl(request))
 				.replacePath(request.getContextPath())
 				.replaceQuery(null)
