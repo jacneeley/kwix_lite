@@ -22,7 +22,7 @@ public class GlobalConstants {
     public static String PWD;
     public static String PWD2;
 	
-	@Value("${app.users.user1")
+	@Value("${app.users.user1}")
 	public String user1;
 	
 	@Value("${app.users.user2}")
