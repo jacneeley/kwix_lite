@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import local.payrollapp.simplepayroll.GlobalConstants;
 import local.payrollapp.simplepayroll.appusers.MockAppUsers;
 import local.payrollapp.simplepayroll.components.OttsHandler;
 
@@ -51,5 +52,18 @@ public class SecurityConfig {
 				.logout(logout -> logout
 						.logoutUrl("/logout").permitAll())
 				.build();
+	}
+	
+	@Bean
+	InMemoryUserDetailsManager imudm() {
+		String pwd1 = new StringBuilder().append("{noop}").append(GlobalConstants.PWD).toString();
+		String pwd2 = new StringBuilder().append("{noop}").append(GlobalConstants.PWD2).toString();
+		var admin = User.withUsername(GlobalConstants.USER1)
+				.password(pwd1)
+				.build();
+		var user = User.withUsername("guest")
+				.password(pwd2)
+				.build();
+		return new InMemoryUserDetailsManager(admin, user);
 	}
 }
