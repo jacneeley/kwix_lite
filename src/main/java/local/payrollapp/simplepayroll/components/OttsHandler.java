@@ -39,7 +39,6 @@ public class OttsHandler implements OneTimeTokenGenerationSuccessHandler {
 		
 		String magicLink = builder.toUriString();
 		
-		
 		String token = magicLink.split("=")[1];
 		Object[] tmpUserInfo = {token, oneTimeToken.getExpiresAt()};
 		String tmpUser = this.generateTmpUser();
