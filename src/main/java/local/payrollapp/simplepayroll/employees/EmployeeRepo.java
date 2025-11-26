@@ -1,106 +1,80 @@
 package local.payrollapp.simplepayroll.employees;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.Assert;
+
+
+import local.payrollapp.simplepayroll.components.MockDatabase;
 
 @Repository
 public class EmployeeRepo implements IEmployeeRepo {
 	
-	private final JdbcClient _jdbcClient;
-	private final ExtendedEmployeeRepo _extEmpRepo;
+	private final MockDatabase _mockDB;
 	
-	public EmployeeRepo(JdbcClient jdbcClient, ExtendedEmployeeRepo extEmpRepo) {
-		this._jdbcClient = jdbcClient;
-		this._extEmpRepo = extEmpRepo;
+	public EmployeeRepo(MockDatabase mockDb) {
+		this._mockDB = mockDb;
 	}
 	
 	@Override
-	public Optional<Employee> findById(String id) {
-		return _jdbcClient.sql("SELECT * FROM EMPLOYEE WHERE id = ?")
-				.param(id)
-				.query(Employee.class)
-				.optional();
+	public Optional<Employee> findById(String id) throws Exception {
+		return Optional.ofNullable(_mockDB.getEmployees().get(id));
 	}
 	
 	@Override
-	public List<Employee> findAllByActive(boolean active) {
-		Integer activeValue = null;
-		if (active) {
-			activeValue = 1;
-		}
-		else if (!active) {
-			activeValue = 0;
-		}
-		List<Employee> allActive = _jdbcClient.sql("SELECT * FROM EMPLOYEE WHERE active = :Active")
-				.param("Active", activeValue)
-				.query(Employee.class).list();
+	public List<Employee> findAllByActive(boolean active) throws Exception {
+		List<Employee> allActive = _mockDB.getEmployees().entrySet()
+				.stream()
+				.filter(e -> e.getValue().isActive() == active)
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
 		return allActive;
+		//		List<Employee> allActive = _jdbcClient.sql("SELECT * FROM EMPLOYEE WHERE active = :Active")
+//				.param("Active", activeValue)
+//				.query(Employee.class).list();
 	}
 
 	@Override
-	public Optional<Employee> findByIdAndActive(String id, boolean active) {
-		Integer activeValue = null;
-		if (active) {
-			activeValue = 1;
+	public Optional<Employee> findByIdAndActive(String id, boolean active) throws Exception {
+		Employee emp = _mockDB.getEmployees().get(id);
+		if(emp == null) {
+			return Optional.empty();
 		}
-		else if (!active) {
-			activeValue = 0;
+		
+		if(emp.isActive() == active) {
+			return Optional.of(emp);
 		}
-		return _jdbcClient.sql("SELECT * FROM EMPLOYEE WHERE active = ? AND id = ?")
-				.params(activeValue, id)
-				.query(Employee.class)
-				.optional();
+		return Optional.empty();
 	}
 
 	@Override
-	public void CreateEmployee(Employee employee) {
-		var created = _jdbcClient.sql("INSERT INTO EMPLOYEE("
-				+ "id,"
-				+ "first_name,"
-				+ "last_name,"
-				+ "phone,"
-				+ "pay,"
-				+ "active,"
-				+ "create_at,"
-				+ "update_at"
-				+ ")"
-				+ "values(?,?,?,?,?,?,?,?)")
-				.params(List.of(employee.getId() ,employee.getfirstName(), employee.getlastName(),
-						employee.getPhone(), employee.getPay(), this.setActiveValue(employee.isActive()), employee.getCreateAt(), employee.getUpdateAt()))
-				.update();
-		Assert.state(created == 1, "Failed to create: " + employee.toString());
+	public void CreateEmployee(Employee employee) throws Exception {
+		if(employee == null || employee.getId() == null) {
+			throw new NullPointerException();
+		}
+		this._mockDB.getEmployees().put(employee.getId(), employee);
 	}
 
 	@Override
-	public void UpdateEmployee(Employee employee, String id) {
-		var updated = _jdbcClient.sql("UPDATE EMPLOYEE SET "
-				+ "first_name=?, "
-				+ "last_name=?, "
-				+ "phone=?, "
-				+ "pay=?, "
-				+ "active=?, "
-				+ "create_at=?, "
-				+ "update_at=? "
-				+ "WHERE id=?")
-				.params(List.of(employee.getfirstName(), employee.getlastName(), employee.getPhone(),
-						employee.getPay(), this.setActiveValue(employee.isActive()), employee.getCreateAt(), employee.getUpdateAt(), id))
-				.update();
-		Assert.state(updated == 1, "Failed to update: " + employee.toString());
+	public void UpdateEmployee(Employee employee, String id) throws Exception {
+		if(employee == null || id == null || id.isBlank()) {
+			throw new Exception();
+		}
+		this._mockDB.getEmployees().put(id, employee);
 	}
 
 	@Override
-	public void DeleteEmployee(String id) {
-		var deleted = _jdbcClient.sql("DELETE FROM EMPLOYEE WHERE id = :Id")
-				.param("Id", id)
-				.update();
-		Assert.state(deleted == 1, "Failed to Delete @ employee id: " + id);
+	public void DeleteEmployee(String id) throws Exception {
+		if(id == null || id.isBlank()) {
+			throw new Exception();
+		}
+		this._mockDB.getEmployees().remove(id);
 	}
 	
-	private Integer setActiveValue(boolean isActive) {
-		return _extEmpRepo.setActiveValue(isActive);
+	public void clear() {
+		this._mockDB.getEmployees().clear();
 	}
 }

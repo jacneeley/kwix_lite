@@ -8,19 +8,17 @@
     <title>KWIX | Paystub Data Entry</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
-		<a th:href="@{/paystubs/{id}(id=${paystub.employeeId})}" class="arrow">←</a>
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+			class="arrow">←
+		</a>
 		<h2 th:text="'Paystub For ' + ${payrollCtrlr.formatedDate(paystub.dayWorked)} + ' | ' + ${paystub.fullName}"></h2>
 		<hr />
 		<div th:if="${userMessage}" th:utext="${userMessage}" ></div>
 		<div class="form">
-			<form method="post" th:action="@{/paystub/{id}(id=${paystub.id})}" th:object="${paystub}">
+			<form method="post" th:action="@{/paystub/{id}(id=${paystub.paystubNum})}" th:object="${paystub}">
 				<label>Employee ID:</label>
 				<input id="employeeId" required readonly th:field="*{employeeId}" th:value="${paystub.employeeId}" type="text"/>
 				<label>Full Name:</label>
@@ -28,8 +26,8 @@
 				<label>Select Jobsite:</label>
 				<select id="jobsite" th:field="*{jobsite}">
 					<option th:each="siteOpt : ${jobsites}"
-						th:value="${siteOpt.name()}"
-						th:text="${siteOpt.name()}">
+						th:value="${siteOpt}"
+						th:text="${siteOpt}">
 					</option>
 				</select>
 				<label>Pay:</label>
@@ -37,7 +35,7 @@
 				<label>Hours Worked:</label>
 				<input id="hours" placeholder="0 Hrs" required th:field="*{hoursWorked}" type="text"/>
 				<label>Day:</label>
-				<input id="day" placeholder="mm/dd/yyyy" required th:field="*{dayWorked}" th:value="${paystub.dayWorked}" type="text"/>
+				<input id="day" placeholder="mm/dd/yyyy" required th:field="*{dayWorked}" type="text"/>
 				<input id="activeFlg" type="hidden" th:field="*{active}" value ="true">
 			    <input class="update btn-3" type="submit" value="Update"
 						onclick="document.getElementById('activeFlg').value='true'">
@@ -49,7 +47,7 @@
 		<div>
 			<p th:text="'Employee Pay For ' + ${payrollCtrlr.formatedDate(paystub.dayWorked)}"></p>
 			<table>
-				<tr>
+				<tr class="header">
 					<th>Employee</th>
 					<th>Jobsite</th>
 					<th>Pay</th>
@@ -70,5 +68,7 @@
 			</table>
 		</div>	
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
   </body>
 </html>

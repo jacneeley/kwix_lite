@@ -1,12 +1,8 @@
 package local.payrollapp.simplepayroll.paystub;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.UUID;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 public class PaystubRequest {

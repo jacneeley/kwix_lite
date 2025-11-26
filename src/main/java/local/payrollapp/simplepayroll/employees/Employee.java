@@ -6,11 +6,7 @@ import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class Employee {
-	@jakarta.persistence.Id
 	private String id;
 	private String firstName;
 	private String lastName;
@@ -98,12 +94,14 @@ public class Employee {
 	}
 	
 	String generateId() {
-		//Random rand = new Random();
 		String first = String.valueOf(firstName.charAt(0));
 		String last = String.valueOf(lastName.charAt(0));
+		if(phone.isBlank()) {
+			Random rand = new Random();
+			int randInt = rand.nextInt(1000, 10000);
+			return first + last + randInt;
+		}
 		String last4 = phone.split("-")[2];
-		//int randInt = rand.nextInt(1000, 10000);
-		
 		return first + last + last4;
 	}
 	

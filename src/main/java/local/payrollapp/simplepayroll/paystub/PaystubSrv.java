@@ -1,55 +1,96 @@
 package local.payrollapp.simplepayroll.paystub;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import local.payrollapp.simplepayroll.exceptions.ElementNotFoundException;
 
 @Service
 public class PaystubSrv implements IPaystubSrv{
+	private static final Logger log = LoggerFactory.getLogger(PaystubSrv.class);
+	private final PaystubRepo _stubRepo; 
 	
-	private final PaystubRepo _stubRepo;
-	private static HashMap<String, Paystub> _paystubs = new HashMap<String, Paystub>(); 
-	
-	PaystubSrv(PaystubRepo stubRepo){
+	public PaystubSrv(PaystubRepo stubRepo){
 		this._stubRepo = stubRepo;
 	}
 	
-	public List<Paystub> findAllEmployeePaystubs(String id){
-		return _stubRepo.findEmployeePaystubs(id);
+	public List<Paystub> findAllEmployeePaystubs(String employeeId){
+		try {
+			return _stubRepo.findEmployeePaystubs(employeeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found for the given employeeId.");
+		}
 	}
 	
 	public List<Paystub> findAllActivePaystubs() {
-		return _stubRepo.findAllPaystubsByActive(true);
+		try {
+			return _stubRepo.findAllPaystubsByActive(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 	
 	@Override
 	public List<Paystub> getPaystubsForEmployee(String id) {
-//		List<Paystub> paystubs = new ArrayList<Paystub>(_paystubs.values());
-//		return paystubs;
-		return _stubRepo.findEmployeePaystubsByActive(id, true);
+		try {
+			return _stubRepo.findEmployeePaystubsByActive(id, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Employee Paystubs could not be found...");
+		}
 	}
 	
 	public List<Paystub> getAllDeletedPaystubs() {
-		return _stubRepo.findAllPaystubsByActive(false);
+		try {
+			return _stubRepo.findAllPaystubsByActive(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 
 	@Override
 	public Optional<Paystub> findByIdAndActive(String id) {
-		return _stubRepo.findByIdAndActive(id, true);
+		try {
+			if(!_stubRepo.findByIdAndActive(id, false).isEmpty()) {
+				throw new ElementNotFoundException("Paystub could not be found...");
+			}
+			
+			return _stubRepo.findByIdAndActive(id, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystubs could not be found...");
+		}
 	}
 	
 	public Optional<Paystub> findByIdAndInactive(String id) {
 //		return _paystubs.get(id);
-		return _stubRepo.findByIdAndActive(id, false);
+		try {
+			if(!_stubRepo.findByIdAndActive(id, false).isEmpty()) {
+				throw new ElementNotFoundException("Paystub could not be found...");
+			}
+			
+			return _stubRepo.findByIdAndActive(id, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ElementNotFoundException("Paystub could not be found...");
+		}
 	}
 
 	@Override
 	public void CreatePaystub(Paystub paystub) {
-//		_paystubs.put(paystub.getId(), paystub);
 		Paystub stub = new Paystub(
 				paystub.generateId(),
 				paystub.getEmployeeId(),
@@ -61,21 +102,45 @@ public class PaystubSrv implements IPaystubSrv{
 				paystub.getDayWorked(),
 				paystub.getCreateAt(),
 				paystub.getUpdateAt());
-		_stubRepo.CreatePaystub(stub);
+		try {
+			_stubRepo.CreatePaystub(stub);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
 	}
 
 	@Override
 	public void UpdatePaystub(Paystub paystub) {
-		_stubRepo.UpdatePaystub(paystub, paystub.getId());
+		try {
+			_stubRepo.UpdatePaystub(paystub, paystub.getPaystubNum());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
 	}
 	
 	@Override
 	public void UpdatePaystubs(Paystub paystub) {//update paystubs in bulk to maintain history if employee id changes.
-		_stubRepo.UpdatePaystubs(paystub, paystub.getId());
+		try {
+			_stubRepo.UpdatePaystubs(paystub, paystub.getPaystubNum());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
 	}
 
 	@Override
 	public void DeletePaystub(String id) {
-		_stubRepo.DeletePaystub(id);
+		try {
+			_stubRepo.DeletePaystub(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
+	}
+	
+	public void clear() {
+		this._stubRepo.clear();
 	}
 }

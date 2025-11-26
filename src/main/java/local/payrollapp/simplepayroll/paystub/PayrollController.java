@@ -12,10 +12,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Controller;
 
-import local.payrollapp.simplepayroll.SimplePayroll;
 import local.payrollapp.simplepayroll.exceptions.ElementNotFoundException;
 
 @Controller
@@ -65,6 +63,7 @@ public class PayrollController {
 	}
 	
 	public PaystubResponse createPaystub(PaystubRequest request) {
+		
 		Paystub newStub = new Paystub(
 				"",
 				request.getEmployeeId(),
@@ -84,7 +83,7 @@ public class PayrollController {
 	public PaystubResponse updatePaystub(String id, PaystubRequest request) {
 		Paystub oldStub = _paystubSrv.findByIdAndActive(id).orElseThrow(() -> new ElementNotFoundException(String.format("Paystub: %s could not be found...", id)));
 		Paystub updatedStub = new Paystub(
-				oldStub.getId(),
+				oldStub.getPaystubNum(),
 				request.getEmployeeId(),
 				request.getFullName(),
 				request.getJobsite(),
@@ -110,7 +109,7 @@ public class PayrollController {
 	public void restorePaystub(String id) {
 		Paystub stub = _paystubSrv.findByIdAndInactive(id).orElseThrow(() -> new ElementNotFoundException(String.format("Deleted Paystub: %s could not be found...", id)));
 		Paystub restoreStub = new Paystub(
-				stub.getId(),
+				stub.getPaystubNum(),
 				stub.getEmployeeId(),
 				stub.getFullName(),
 				stub.getJobsite(),
@@ -122,10 +121,14 @@ public class PayrollController {
 				LocalDate.now());
 		_paystubSrv.UpdatePaystub(restoreStub);
 	}
+	
+	public void clear() {
+		this._paystubSrv.clear();
+	}
 
 	private PaystubResponse getResponse(Paystub stub) {
 		PaystubResponse stubResponse = new PaystubResponse(
-				stub.getId(),
+				stub.getPaystubNum(),
 				stub.getEmployeeId(),
 				stub.getFullName(),
 				stub.getJobsite(),
@@ -145,8 +148,8 @@ public class PayrollController {
 	
 	private LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
 	    return dateToConvert.toInstant()
-	      .atZone(ZoneId.systemDefault())
-	      .toLocalDate();
+				      .atZone(ZoneId.systemDefault())
+				      .toLocalDate();
 	}
 	
 	public double roundMoney(double money) {

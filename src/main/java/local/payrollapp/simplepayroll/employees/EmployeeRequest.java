@@ -20,8 +20,7 @@ public class EmployeeRequest{
 	 @Pattern(regexp="^[a-zA-Z]+$", message="Last Name must only contain letters.")
 	 private String lastName;
 	 
-	 @NotEmpty(message = "Phone cannot be empty.")
-	 @Pattern(regexp="^[0-9]{3}-[0-9]{3}-[0-9]{4}$", message="Enter a valid phone number.")
+	 //@Pattern(regexp="^[0-9]{3}-[0-9]{3}-[0-9]{4}$", message="Enter a valid phone number.")
 	 private String phone;
 	 
 	 @Positive(message="Pay must be greater than ZERO.")

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <title>KWIX | Home</title>
+  </head>
+	<body>
+    <nav></nav>
+    <div class="content">
+      <div>
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+			class="arrow">←
+		</a>
+		<h2>Search</h2>
+        <hr />
+		<div class="msg" th:if="${userMessage}" th:utext="${userMessage}"></div>
+		<div id="error" class="error" th:if="${isError}">
+			<a id="close">x</a>
+			<p>Error(s) Occurred:</p>
+			<ul th:each="err: ${errMessages}" th:text="${err}"></ul>
+		</div>
+        <div class="form">
+          <form method="post" th:action="@{/search}" th:object="${searchRequest}" >
+            <h3>Select Fields:</h3>
+            <hr />
+			<div class="checkboxes">
+				<label for="emp-check">Employees</label>
+				<input 
+					type="checkbox" id="emp-check" 
+					th:checked="${searchRequest.empChecked}"
+					th:field="*{empChecked}"
+				/>
+				
+				<label for="pay-check">Paystubs</label>
+				<input 
+					type="checkbox" 
+					id="pay-check" 
+					th:checked="${searchRequest.paystubChecked}"
+					th:field="*{paystubChecked}"
+				/>
+				
+				<label for="job-check">Jobsites</label>
+				<input 
+					type="checkbox" 
+					id="job-check" 
+					th:checked="${searchRequest.jobsiteChecked}"
+					th:field="*{jobsiteChecked}"
+				/>
+			</div>
+			<!--Btns Start -->
+			<div id="employee-btns" style="display: none;">
+				<!-- Employee Id Btn --> 
+				<button
+					class="btn search-btn" 
+					type="button" 
+					onclick="showField(document.getElementById('selectedEmpIdFlg'))">
+					Employee ID 
+				</button>
+				
+				<!-- Employee First & Last Name Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedEmpNameFlg'))" >Employee Name</button>
+				
+				<!-- Phone Number Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedPhoneFlg'))">Phone</button>
+			</div>
+			<div id="paystub-btns" style="display: none;">
+				<!-- PaystubNum Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedStubFlg'))">Paystub Number</button>
+			
+				<!-- Pay Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedPayFlg'))">Pay</button>
+
+				<!-- Hours Worked Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedHoursWorkedFlg'))">Hours Worked</button>
+				
+				<!-- Day Worked Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedDay'))">Day Worked</button>
+			</div>
+			<div id="jobsite-btns" style="display: none;">
+				<!-- Jobsite Name Btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedJobsiteFlg'))">Jobsite Name</button>
+				
+				<!-- Contract btn -->
+				<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedContractFlg'))">Contract?</button>
+			</div>            
+			
+			<!-- Status btn -->			
+			<button class="btn search-btn" type="button" onclick="showField(document.getElementById('selectedStatusFlg'))">Status</button>
+			
+			<!--Btns End -->
+			
+			<!-- Fields: -->
+			<div class="search-fields">
+				<!--Employee ID Field -->
+				<div id="selectedEmpIdFlg" 
+					style="display: none;">
+					<input type="hidden" th:field="*{empIdSelected}" value = "false" />
+					<label>Employee ID:</label>
+					<input id="empId" th:field="*{empId}" />
+					<button type="button" onclick="any(document.getElementById('empId'))">Any?</button>
+				</div>
+				
+				<!--Employee Name Fields -->
+				<div id="selectedEmpNameFlg" 
+					style="display: none;">
+						<input type="hidden" th:field="*{nameSelected}" value="false" />
+						<label>First Name:</label>
+						<input id="fname" type="text" th:field="*{empFName}" >
+						<button type="button" onclick="any(document.getElementById('fname'))">Any?</button>
+						<label>Last Name:</label>
+						<input id="lname" type="text" th:field="*{empLName}" >
+						<button type="button" onclick="any(document.getElementById('lname'))">Any?</button>
+				</div>
+				
+				<!-- Phone Field -->
+				<div id="selectedPhoneFlg"
+					style="display: none;">
+						<input type="hidden" th:field="*{phoneSelected}" value="false" />
+						<label>Phone Number:</label>
+						<input id="empPhone" placeholder="###-###-####" type="text" th:field="*{phone}">
+						<button type="button" onclick="any(document.getElementById('empPhone'))">Any?</button>
+				</div>
+				
+				<!-- PaystubNum Field -->
+				<div id="selectedStubFlg"
+					style="display: none;">
+						<input type="hidden" th:field="*{paystubNumSelected}" value="false" />
+						<label>Paystub Number:</label>
+						<input id="payNum" type="text" th:field="*{paystubNum}">
+						<button type="button" onclick="any(document.getElementById('payNum'))">Any?</button>
+				</div>
+				
+				<!-- Pay Field-->
+				<div id="selectedPayFlg"
+					style="display: none;" >
+						<input type="hidden" th:field="*{paySelected}" value="false" />
+						<label>Hourly Pay:</label>
+						<input id="payAmt" placeholder="0.00" type="text" th:field="*{pay}"/>
+						<button type="button" onclick="any(document.getElementById('payAmt'))">Any?</button>
+				</div>
+				
+				<!-- Day Worked Field -->
+				<div id="selectedDay"
+					style="display:none" >
+						<p>*enter a range of dates, or just one*</p>
+						<input type="hidden" th:field="*{daySelected}" value="false" />
+						<label>Day Worked:</label>
+						<label>Start:</label>
+						<input id="dayWorked" placeholder="mm/dd/yyyy" type="date" th:field="*{dayWorked}" />
+						<button type="button" onclick="any(document.getElementById('dayWorked'))">Any?</button>
+						
+						<input type="hidden" th:field="*{daySelected}" value="false" />
+						<label>End(optional):</label>
+						<input id="endDayWorked" placeholder="mm/dd/yyyy" type="date" th:field="*{endDayWorked}" />
+						<button type="button" onclick="any(document.getElementById('endDayWorked'))">Any?</button>
+				</div>
+				
+				<!-- Jobsite Field -->
+				<div id="selectedJobsiteFlg"
+					style="display: none;">
+						<input type="hidden" th:field="*{jobsiteSelected}" value="false" />
+						<label>Jobsite:</label>
+						<input id="jobsite" type="text" th:field="*{jobsiteName}" />
+						<button type="button" onclick="any(document.getElementById('jobsite'))">Any?</button>
+				</div>
+				
+				<!-- Hours Worked Field-->
+				<div id="selectedHoursWorkedFlg"
+					style="display: none;">
+						<input type="hidden" th:field="*{hoursSelected}" value="false" />
+						<label>Hours Worked?:</label>		
+						<input id="hours" placeholder="0.0 Hrs" type="text" th:field="*{hoursWorked}" />
+						<button type="button" onclick="any(document.getElementById('hours'))">Any?</button>
+				</div>
+				
+				<!--Contract Field -->
+				<div id="selectedContractFlg" 
+					style="display: none;"
+					class="radios">
+						<input type="hidden" th:field="*{contractSelected}" value="false" />
+						<label style="display:block !important; margin-top:1rem; padding:0 !important;">Contract Jobs:</label>
+						<label>No:</label>
+						<input type="radio" name="No" value="false" th:field="*{isContract}" />
+						<label>Yes:</label>
+						<input type="radio" name="Yes" value="true" th:field="*{isContract}" />
+				</div>
+				
+				<!-- Status Field -->
+				<div id="selectedStatusFlg" 
+					style="display: none;"
+					class="radios">
+						<input type="hidden" th:field="*{statusSelected}" value="false" />
+						<label style="display:block !important; margin-top:1rem; padding:0 !important;">Status:</label>
+						<label>Deleted:</label>
+						<input type="radio" name="No" value="false" th:field="*{active}" />
+						<label>Active:</label>
+						<input type="radio" name="Yes" value="true" th:field="*{active}" />
+				</div>
+			</div>
+			<button type="button" class="add_btn" th:onclick="alert('Not available in demo version. \nThis Feature is for paid users only.')">Search</button>
+            <input class="btn" type="reset" name="Reset" >
+          </form>
+		</div>
+		<!-- Search Criteria Table -->
+		<div th:if="${searchResults.isEmpty()}"></div>
+		<div th:unless="${searchResults.isEmpty()}">
+			<h3>Search Results:</h3>
+			<hr/>
+			<table>
+				<thead>
+					<tr class="header">
+						<th th:each="h : ${headers}" th:text="${h}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="result : ${searchResults}">
+						<td th:if="${result.empId != null}">
+							<a th:href="@{employee/{id}(id=${result.empId})}">
+								<span th:text="${result.empId}"></span>
+							</a>
+						</td>
+						<td th:if="${result.empName != null}">
+							<span th:text="${result.empName}"></span>
+						</td>
+						<td th:if="${result.phone != null}">
+							<span th:text="${result.phone}"></span>
+						</td>
+						<td th:if="${result.pay != null}">
+							<span th:text="${result.pay}"></span>
+						</td>
+						<td th:if="${result.paystubNum != null}">
+							<a th:href="@{paystub/{id}(id=${result.paystubNum})}">
+							<span th:text="${result.paystubNum}"></span>
+						</td>
+						<td th:if="${result.hoursWorked != null}">
+							<span th:text="${result.hoursWorked}"></span>
+						</td>
+						<td th:if="${result.dayWorked != null}">
+							<span th:text="${result.dayWorked.format(dateFormatter)}"></span>
+						</td>
+						<td th:if="${result.jobsiteName != null}">
+							<span th:text="${result.jobsiteName}"></span>
+						</td>
+						<td th:if="${result.isContract != null}">
+							<span th:text="${result.isContract}"></span>
+						</td>
+						<td th:if="${result.active != null}">
+							<span th:text="${result.active}"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button type="button" class="exp" th:onclick="alert('Not available in demo version. \nThis Feature is for paid users only.')">Export</button>
+		</div>
+      </div>
+    </div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handlePopups.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
+	<script>
+		window.onload = function(){
+			const selList = querySelectorAll("input")
+			selList.forEach(i => {
+				if(i.type === "hidden"){
+					i.setAttribute("value","false");
+				}
+			});
+		}
+		const empBtns = document.getElementById("employee-btns");
+		const payBtns = document.getElementById("paystub-btns");
+		const jobBtns = document.getElementById("jobsite-btns");
+		document.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+			cb.addEventListener('click', () => {
+				if(cb.id === "emp-check"){
+					cb.checked === true ? empBtns.style.display = 'block' : empBtns.style.display = 'none'; 
+				}
+				
+				if(cb.id === "pay-check"){
+					cb.checked === true ? payBtns.style.display = 'block' : payBtns.style.display = 'none'; 
+				}
+				
+				if(cb.id === "job-check"){
+					cb.checked === true ? jobBtns.style.display = 'block' : jobBtns.style.display = 'none'; 
+				}
+			});
+		});
+		
+		function showField(field){
+		    field.style.display === 'block' ? field.style.display = 'none' : field.style.display = 'block';
+			let childInputs = field.querySelectorAll('input');
+			childInputs.forEach(c => {
+				if(c.type === "hidden"){
+					console.log(c);
+					field.style.display === 'block' ? c.value = "true" : c.value = "false";
+				}
+			});
+		}
+		
+		function any(input){
+			if(input.type === "date"){
+				if(input.value === "0001-01-01"){
+					input.value = "";
+					input.removeAttribute('readonly');
+				}
+				else{
+					input.value = "0001-01-01";
+					input.setAttribute('readonly','true');
+				}
+			}
+			else {
+				if(input.value === "any"){
+					input.value = "";
+					input.removeAttribute('readonly');
+				}
+				else{
+					input.value = "any";
+					input.setAttribute('readonly','true');
+				}
+			}
+		}
+		const len = document.querySelectorAll('button').length;
+		const btnsClickable = new Array(len).fill(false);
+		document.querySelectorAll('button').forEach((btn, i) => {
+			btn.addEventListener('click', () => {
+				if(btnsClickable[i] === false){
+					btn.style.backgroundColor = '#b2b2b2';
+					btnsClickable[i] = true;
+				}
+				else {
+					btn.style.backgroundColor = '#e9e9ed';
+					btnsClickable[i] = false;
+				}
+			})
+		});
+	</script>
+  </body>
+</html>	

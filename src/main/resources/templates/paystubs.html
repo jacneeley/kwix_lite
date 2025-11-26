@@ -8,14 +8,12 @@
     <title>KWIX | Paystub Data Entry</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
-		<a href="/payroll" class="arrow">←</a>
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|" 
+			class="arrow">←
+		</a>
 		<h2 th:text="'Manage Paystubs For ' + ${paystub.fullName}"></h2>
 		<hr />
 		<div th:if="${userMessage}" th:utext="${userMessage}" ></div>
@@ -28,8 +26,8 @@
 				<label>Select Jobsite:</label>
 				<select id="jobsite" th:field="*{jobsite}">
 					<option th:each="siteOpt : ${jobsites}"
-						th:value="${siteOpt.name()}"
-						th:text="${siteOpt.name()}">
+						th:value="${siteOpt}"
+						th:text="${siteOpt}">
 					</option>
 				</select>
 				<label>Hourly Pay:</label>
@@ -43,8 +41,23 @@
 			</form>
 		</div>
 		<div>
+		<div class="filter-fields">
+			<label>Day Worked:</label>
+			<input type="text" class="filter-input" />
+			<label>Jobsite Worked:</label>
+			<input type="text" class="filter-input" />
+			<label>Pay:</label>
+			<input type="text" class="filter-input date" />
+			<label>Hours Worked:</label>
+			<input type="text" class="filter-input date" />
+			<label>Entered:</label>
+			<input type="text" class="filter-input date" />
+			<label>Last Modified:</label>
+			<input type="text" class="filter-input date" />
+			<p id="searchError" style="display: none;">No records could be found...</p>
+		</div>
 			<table>
-				<tr>
+				<tr class="header">
 					<th>Total Hours</th>
 			        <th>Total Gross Pay</th>
 				</tr>
@@ -56,8 +69,8 @@
 			</table>
 		</div>
 		<div>
-			<table>
-			    <tr>
+			<table id="filter-tb-stub">
+			    <tr class="header">
 					<th>Day Worked</th>
 			        <th>Jobsite Worked</th>
 					<th>Pay</th>
@@ -76,10 +89,13 @@
 					<td th:text="${paystub.hoursWorked}"></td>
 			        <td th:text="${paystub.createAt}"></td>
 			        <td th:text="${paystub.updateAt}"></td>
-			        <td class="edit-td"><a th:href="@{/paystub/{id}(id=${paystub.id})}" class="edit">✏</a></td>
+			        <td class="edit-td"><a th:href="@{/paystub/{id}(id=${paystub.paystubNum})}" class="edit">✏</a></td>
 			    </tr>
 			</table>
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
+	<script th:src="@{/js/filter.js}"></script>
   </body>
 </html>

@@ -3,8 +3,6 @@ package local.payrollapp.simplepayroll.paystub;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-
 public interface IPaystubSrv {
 	List<Paystub> getPaystubsForEmployee(String id);
 	Optional<Paystub> findByIdAndActive(String id);

@@ -5,13 +5,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-@Entity
 public class Paystub {
-	@Id
-	private String id;
+	private String paystubNum;
 	private String employeeId;
 	private String fullName;
 	private String jobsite;
@@ -22,8 +17,8 @@ public class Paystub {
 	private LocalDate createAt;
 	private LocalDate updateAt;
 	
-	public String getId() {
-		return id;
+	public String getPaystubNum() {
+		return paystubNum;
 	}
 
 	public String getEmployeeId() {
@@ -62,10 +57,10 @@ public class Paystub {
 		return updateAt;
 	}
 
-	public Paystub(String id, String employeeId, String fullName, String jobsite, double pay, double hoursWorked,
+	public Paystub(String paystubNum, String employeeId, String fullName, String jobsite, double pay, double hoursWorked,
 			boolean active, LocalDate dayWorked, LocalDate createAt, LocalDate updateAt) {
 		super();
-		this.id = id;
+		this.paystubNum = paystubNum;
 		this.employeeId = employeeId;
 		this.fullName = fullName;
 		this.jobsite = jobsite;
@@ -83,7 +78,7 @@ public class Paystub {
 
 	@Override
 	public String toString() {
-		return "Paystub [id=" + id + ", employeeId=" + employeeId + ", fullName=" + fullName + ", jobsite=" + jobsite
+		return "Paystub [id=" + paystubNum + ", employeeId=" + employeeId + ", fullName=" + fullName + ", jobsite=" + jobsite
 				+ ", pay=" + pay + ", hours=" + hoursWorked + ", day=" + dayWorked + ", active=" + active + ", createAt=" + createAt
 				+ ", updateAt=" + updateAt + "]";
 	}

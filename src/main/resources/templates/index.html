@@ -5,49 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link th:href="@{/styles/global.css}" rel="stylesheet" />
-    <title>KWIX | Home</title>
+    <title>KWIX LITE | Home</title>
   </head>
 	<body>
-		<nav>
-			<a href="/">KWIX</a>
-			<a href="/employees">Employees</a>
-			<a href="/payroll">Payroll</a>
-			<span class="ver" th:text="${ver}"></span>
-		</nav>
+		<nav></nav>
 		<div class="content">
 			<div>
 				<h2>Dashboard</h2>
 				<hr />
-				<div class="home">
-					<h3>Welcome to Kwix</h3>
-					<p>Kwix is a simple employee + payroll management system designed for small business that wish to go paperless at a low cost.</p>
-					<p>Kwix is a pay once, user forever App. No Subscriptions! No Fees!</p>
-					<p>This is a demo version available to the public and is still a work in progress.</p>
-					<p>This is a public ALPHA build and is not representative of the final product.</p>
-					<h3>DEMO Features:</h3>
-					<li><a href="/employees">Employee Management:</a></li>
-					<ul> - Create/Update/Delete Employees</ul>
-					<ul> - Set Employee Pay</ul>
-					<li><a href="/payroll">Payroll Management:</a></li>
-					<ul> - Create/Update/Delete Paystubs For existing Employees</ul>
-					<ul> - Manage hours worked for each employee</ul>
-					<ul> - Calculate total pay (hours worked x employee hourly pay)</ul>
-					<ul> - View gross earnings for Employee</ul>
-					<!--<h3>Resources</h3>
-					<a>Help</a> -->
-					<h3>Interested In Full Access?</h3>
-					<ul> - Paid users have access to save their data.</ul>
-					<ul> - Save employee paystub history</ul>
-					<ul> - Download paystubs records for employees that work with any spreadsheet software (microsoft excel included)</ul>
-					<ul> - And more</ul>
-					<p>For free consulation and pricing, contact 
-						<a 
-						href="mailto:jakneeley@outlook.com?subject=Kwix Inquiry <insert your name/business here>">
-							jakneeley@outlook.com
-						</a>
+				<div class="sub-content">
+					<h2>Welcome</h2>
+					<p>
+						KWIX is a payroll management system that I built to solve business problems for my client <em>Works of Art Construction LLC</em>.
+						The client has multiple employees spread across multiple jobsites. They wanted an easy way to store:
 					</p>
+					<ul>
+						<li>Employee Information</li>
+						<li>Payroll Information</li>
+						<li>Jobsite Information</li>
+						<li>Paystub Information</li>
+					</ul>
+					<p>KWIX assisted my client in managing labor costs, jobsite costs, time worked per employee and across jobsites and more.</p>
+					
+					<h3>What is KWIX LITE?</h3>
+					<p>
+						KWIX LITE is a sandbox version of KWIX. It was designed to allow guest users to play around with KWIX in a sandbox environment.
+						It is essentially a public demo that I can show off to new potential clients or recruiters who may be curious to see what I have built using springboot.
+						Feel free to play around, but note that some features are disabled and all data is scoped to each user's session. 
+						Once a user logs out or their session expires all of their data is destroyed.
+					</p>
+					
+					<h3>Resources</h3>
+					<a href="/help">Help</a>
+					<a href="mailto:jakneeley@outlook.com">Contact</a>
 				</div>
 			</div>
 		</div>
+		<script th:src="@{/js/navComponent.js}"></script>
 	</body>
 </html>

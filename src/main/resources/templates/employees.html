@@ -8,17 +8,20 @@
     <title>KWIX | Employee Data Entry</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
+		<a id="return-page" 
+			th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+			class="arrow">←
+		</a>
 		<h2>Manage Employees</h2>
-		<a class="del arrow smaller" href="/deletedemployees">Recently Deleted→</a>
+		<a class="del arrow smaller" href="/deletedemployees">Recently Deleted →</a>
 		<hr />
 		<div class="msg" th:if="${userMessage}" th:utext="${userMessage}"></div>
+		<div class="error" th:if="${isError}">
+			<p>Error(s) Occurred:</p>
+			<ul th:each="err: ${errMessages}" th:text="${err}"></ul>
+		</div>
 		<div class="form">
 			<form method="post" th:action="@{/employees}" th:object="${employee}">
 			    <label>First Name:</label>
@@ -26,22 +29,35 @@
 				<label>Last Name:</label>
 			    <input placeholder="Enter Last Name" required th:field="*{lastName}" type="text"/>
 				<label>Phone:</label>
-				<input placeholder="###-###-####" required th:field="*{phone}" type="text"/>
+				<input placeholder="###-###-####" th:field="*{phone}" type="text"/>
 				<label>Pay:</label>
 				<input placeholder="$0.00" required th:field="*{pay}" type="text"/>
 			    <input class="add btn" type="submit" value="Add Employee">
 			    <input class="btn" type="reset" value="Reset">
 			</form>
 		</div>
+		<div class="filter-fields">
+			<label>Employee Name:</label>
+			<input type="text" class="filter-input" />
+			<label>Phone:</label>
+			<input type="text" class="filter-input" />
+			<label>Pay:</label>
+			<input type="text" class="filter-input" />
+			<label>Created Date:</label>
+			<input type="text" class="filter-input date" />
+			<label>Last Updated:</label>
+			<input type="text" class="filter-input date" />
+			<p id="searchError" style="display: none;">No records could be found...</p>
+		</div>
 		<div>
-			<table>
-			    <tr>
+			<table id="filter-tb-emp">
+			    <tr class="header">
 			        <th>Id</th>
 			        <th>Name</th>
 			        <th>Phone</th>
 					<th>Pay</th>
 			        <th>Created</th>
-			        <th>Last Modified</th>
+			        <th>Last Updated</th>
 			        <th>Edit</th>
 			    </tr>
 			    <tr th:if="${employees.isEmpty()}">
@@ -57,7 +73,11 @@
 			        <td class="edit-td"><a th:href="@{employee/{id}(id=${employee.id})}" class="edit">✏</a></td>
 			    </tr>
 			</table>
+			<button type="button" class="exp" th:onclick="alert('Not available in demo version. \nThis Feature is for paid users only.')">Export</button>
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
+	<script th:src="@{/js/filter.js}"></script>
   </body>
 </html>

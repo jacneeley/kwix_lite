@@ -8,14 +8,9 @@
     <title>KWIX | Recently Deleted Employees</title>
   </head>
   <body>
-	<nav>
-		<a href="/">KWIX</a>
-		<a href="/employees">Employees</a>
-		<a href="/payroll">Payroll</a>
-		<span class="ver" th:text="${ver}"></span>
-	</nav>
+	<nav></nav>
 	<div class="content">
-		<a href="/employees" class="arrow">←</a>
+		<a th:href="@{{id}(id=${prevPage})}" class="arrow">←</a>
 		<h2>Recently Deleted Employees</h2>
 		<hr />
 		<p>**CAUTION: Deleting an employee here is permanent!**</p>
@@ -48,5 +43,6 @@
 			</table>
 		</div>
 	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
   </body>
 </html>

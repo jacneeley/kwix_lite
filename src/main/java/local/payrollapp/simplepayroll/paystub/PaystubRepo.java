@@ -1,146 +1,95 @@
 package local.payrollapp.simplepayroll.paystub;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.jdbc.core.simple.JdbcClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import local.payrollapp.simplepayroll.components.MockDatabase;
+import local.payrollapp.simplepayroll.view.AppController;
+
 @Repository
 public class PaystubRepo implements IPaystubRepo{
+	private final MockDatabase _mockDB;
 	
-	private final JdbcClient _jdbcClient;
-	private final ExtendedPaystubRepo _extPaystubRepo;
-	
-	public PaystubRepo (JdbcClient jdbcClient, ExtendedPaystubRepo extPaystubRepo) {
-		this._jdbcClient = jdbcClient;
-		this._extPaystubRepo = extPaystubRepo;
+	public PaystubRepo(MockDatabase mockDb) {
+		this._mockDB = mockDb;
 	}
 	
 	@Override
-	public List<Paystub> findEmployeePaystubs(String id) {
-		return _jdbcClient.sql("SELECT * FROM PAYSTUB WHERE employee_id = ?")
-		.param(id)
-		.query(Paystub.class).list();
+	public List<Paystub> findEmployeePaystubs(String employeeId) throws Exception {
+		List<Paystub> stubs = _mockDB.getPaystubs().entrySet()
+				.stream()
+				.filter(p -> p.getValue() != null)
+				.filter(p -> p.getValue().getEmployeeId() == employeeId)
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
+		return stubs;
 	}
 	
 	@Override
-	public List<Paystub> findEmployeePaystubsByActive(String id, boolean active) {
-		Integer activeValue = null;
-		if (active) {
-			activeValue = 1;
-		}
-		else if (!active) {
-			activeValue = 0;
-		}
-		List<Paystub> allActive = _jdbcClient.sql("SELECT * FROM PAYSTUB WHERE active = ? AND employee_id = ?")
-				.params(activeValue, id)
-				.query(Paystub.class).list();
-		return allActive;
+	public List<Paystub> findEmployeePaystubsByActive(String employeeId, boolean active) throws Exception {
+		List<Paystub> stubs = _mockDB.getPaystubs().entrySet()
+				.stream()
+				.filter(p -> p.getValue() != null)
+				.filter(p -> employeeId.equals(p.getValue().getEmployeeId()))
+				.filter(p -> p.getValue().isActive() == active)
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
+		return stubs;
 	}
 	
 	@Override
-	public List<Paystub> findAllPaystubsByActive(boolean active) {
-		Integer activeValue = null;
-		if (active) {
-			activeValue = 1;
-		}
-		else if (!active) {
-			activeValue = 0;
-		}
-		List<Paystub> allActive = _jdbcClient.sql("SELECT * FROM PAYSTUB WHERE active = ?")
-				.params(activeValue)
-				.query(Paystub.class).list();
-		return allActive;
+	public List<Paystub> findAllPaystubsByActive(boolean active) throws Exception {
+		List<Paystub> stubs = _mockDB.getPaystubs().entrySet()
+				.stream()
+				.filter(p -> p.getValue() != null)
+				.filter(p -> p.getValue().isActive() == active)
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
+		return stubs;
 	}
 
 	@Override
-	public Optional<Paystub> findByIdAndActive(String id, boolean active) {
-		Integer activeValue = null;
-		if (active) {
-			activeValue = 1;
+	public Optional<Paystub> findByIdAndActive(String id, boolean active) throws Exception {
+		Paystub stub = _mockDB.getPaystubs().get(id);
+		if(stub == null) {
+			return Optional.empty();
 		}
-		else if (!active) {
-			activeValue = 0;
-		}
-		return _jdbcClient.sql("SELECT * FROM PAYSTUB WHERE active = ? AND id = ?")
-				.params(activeValue, id)
-				.query(Paystub.class)
-				.optional();
-	}
-
-	@Override
-	public void CreatePaystub(Paystub paystub) {
-		var created = _jdbcClient.sql("INSERT INTO PAYSTUB("
-				+ "id,"
-				+ "employee_id,"
-				+ "full_name,"
-				+ "jobsite,"
-				+ "pay,"
-				+ "hours_worked,"
-				+ "active,"
-				+ "day_worked,"
-				+ "create_at,"
-				+ "update_at)"
-				+ "values(?,?,?,?,?,?,?,?,?,?)")
-				.params(List.of(paystub.getId(), paystub.getEmployeeId(), paystub.getFullName(), paystub.getJobsite(),
-						paystub.getPay(), paystub.getHoursWorked(), this.setActiveValue(paystub.isActive()), 
-						paystub.getDayWorked(), paystub.getCreateAt(), paystub.getUpdateAt()))
-				.update();
-		Assert.state(created == 1, "Failed to create: " + paystub.toString());
-	}
-
-	@Override
-	public void UpdatePaystub(Paystub paystub, String id) {
-		var updated = _jdbcClient.sql("UPDATE PAYSTUB SET "
-				+ "full_name=?,"
-				+ "jobsite=?,"
-				+ "pay=?,"
-				+ "hours_worked=?,"
-				+ "active=?,"
-				+ "day_worked=?,"
-				+ "create_at=?,"
-				+ "update_at=?"
-				+ " WHERE id=? AND employee_id=?")
-				.params(List.of(paystub.getFullName(), paystub.getJobsite(), paystub.getPay(),paystub.getHoursWorked(),
-						this.setActiveValue(paystub.isActive()), paystub.getDayWorked(), paystub.getCreateAt(), paystub.getUpdateAt(),
-						id, paystub.getEmployeeId()))
-				.update();
-		Assert.state(updated == 1, "Failed to update: " + paystub.toString());
-	}
-
-
-	@Override
-	public void UpdatePaystubs(Paystub paystub, String id) {
-		var updated = _jdbcClient.sql("UPDATE PAYSTUB SET "
-				+ "employee_id=?,"
-				+ "full_name=?,"
-				+ "jobsite=?,"
-				+ "pay=?,"
-				+ "hours_worked=?,"
-				+ "active=?,"
-				+ "day_worked=?,"
-				+ "create_at=?,"
-				+ "update_at=?"
-				+ " WHERE id=?")
-				.params(List.of(paystub.getEmployeeId(), paystub.getFullName(), paystub.getJobsite(), paystub.getPay(),paystub.getHoursWorked(),
-						this.setActiveValue(paystub.isActive()), paystub.getDayWorked(), paystub.getCreateAt(), paystub.getUpdateAt(),
-						id))
-				.update();
-		Assert.state(updated == 1, "Failed to update: " + paystub.toString());
 		
+		if(stub.isActive() == active) {
+			return Optional.of(stub);
+		}
+		return Optional.empty();
 	}
 
 	@Override
-	public void DeletePaystub(String id) {
-		var deleted = _jdbcClient.sql("DELETE FROM PAYSTUB WHERE id = :Id")
-				.param("Id", id)
-				.update();
-		Assert.state(deleted == 1, "Failed to Delete @ employee id: " + id);
+	public void CreatePaystub(Paystub paystub) throws Exception {
+		this._mockDB.getPaystubs().put(paystub.getPaystubNum(), paystub);
+	}
+
+	@Override
+	public void UpdatePaystub(Paystub paystub, String id) throws Exception {
+		this._mockDB.getPaystubs().put(paystub.getPaystubNum(), paystub);
 	}
 	
-	private Integer setActiveValue(boolean isActive) {
-		return _extPaystubRepo.setActiveValue(isActive);
+	@Override
+	public void UpdatePaystubs(Paystub paystub, String id) throws Exception {
+		this._mockDB.getPaystubs().put(paystub.getPaystubNum(), paystub);
+	}
+
+	@Override
+	public void DeletePaystub(String id) throws Exception {
+		this._mockDB.getPaystubs().remove(id);
+	}
+	
+	public void clear() {
+		this._mockDB.getPaystubs().clear();
 	}
 }

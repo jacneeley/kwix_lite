@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <title>KWIX | Jobsite Data Entry</title>
+  </head>
+  <body>
+	<nav></nav>
+	<div class="content">
+		<a href="/jobsites" class="arrow">←</a>
+		<h2 th:text="'Manage ' +${jobsite.jobsiteName}"></h2>
+		<hr />
+		<div>
+			<div th:if="${userMessage}" th:utext="${userMessage}" ></div>
+			<div class=form>
+				<form method = "post" th:action="@{/jobsite/{id}(id=${jobsite.id})}" th:object="${jobsite}">
+					<label>Jobsite Name:</label>
+					<input placeholder="Enter Jobsite Name" required th:field="*{jobsiteName}" type="text"/>
+					<label>Contract Job?</label>
+					<div class="radios">
+						<input type="radio" name="No" value="false" th:field="*{contract}" />
+						<label>No</label>
+						<input type="radio" name="Yes" value="true" th:field="*{contract}" />
+						<label>Yes</label>
+					</div>
+					<input id="activeFlg" type="hidden" th:field="*{active}" value ="true">
+				    <input class="update btn-3" type="submit" value="Update"
+							onclick="document.getElementById('activeFlg').value='true'">
+					<input class="delete btn-3" type="submit" value="Delete"
+							onclick="document.getElementById('activeFlg').value='false'">
+				    <input class="btn-3" type="reset" value="Reset">
+				</form>
+			</div>		
+		</div>
+	</div>
+	<script th:src="@{/js/navComponent.js}"></script>
+	<script th:src="@{/js/handleReturn.js}"></script>
+  </body>
+</html>

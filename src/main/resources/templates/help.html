@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <title>KWIX | Home</title>
+  </head>
+	<body>
+		<nav></nav>
+		<div class="content">
+			<a id="return-page" 
+						th:attr="onclick=|returnToPage('${pageUtil.moveBackToPrev()}'); return true;|"
+						class="arrow">←
+			</a>
+			<h2>Help</h2>
+            <hr />
+            <table class="help-tb">
+                <tbody>
+                    <tr>
+                        <td class="l-col">
+                            <div class = "toc">
+                                <table id="top" class="help-tb">
+                                    <tbody>
+                                        <tr><th>Table of Contents</th></tr>
+                                        <tr><td><a href="#general">General</a></td></tr>
+                                        <tr><td><a href="#employees">Employees</a></td></tr>
+                                        <tr><td><a href="#payroll">Payroll</a></td></tr>
+                                        <tr><td><a href="#jobsites">Jobsites</a></td></tr>
+										<tr><td><a href="#search">Search</a></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td class="r-col">
+                            <div id="helpBox" class="help-sub-content">
+								<div class="help-txt">
+									<h2 style="text-decoration: underline;" id="general">General</h2>
+									        <p>
+									            Welcome to <b>KWIX</b>, the fast and easy employee and payroll management system.
+									            <b>KWIX</b> was concieved to store employee information, record time worked, and to record which employees worked at which jobsite.
+									        </p>
+									        <h3>Quick Overview:</h3>
+									        <p>
+									            Main pages:
+									            <ul>
+									                <li>Dashboard: Home page</li>
+									                <li>Employees: Create and Manage Employees</li>
+									                <li>Payroll: Create and Manage Paystubs for Employees</li>
+									                <li>Jobsites: Create and Manage Jobsites</li>
+									            </ul>
+									            Each main page has a "back" arrow that will take you back to the previous page.
+									            Additionally, each page has a <b>recently deleted</b> link that will show inactive records.
+									            "Inactive" records are records that have been "deleted". When a record is "deleted" it is only set as "inactive".
+									            This is to prevent accidental deletions. To permanently delete a record, you must click "delete" on the <b>recently deleted</b> page.
+									        </p>
+									        <p>
+									            The <b>Dashboard</b> will display recent updates and useful information.
+									            There is a link to the <b>Help</b> page (this page) for troubleshooting.
+									            There is also a contact link that links to the developer email.
+									        </p>
+									        <h3>Login/Logout/Session:</h3>
+									        <p>
+									            When logging, in your "session" will be stored in your browser for a brief period of time. Your "session" will not store any drafts or incompleted entries for Employees, Payroll, or Jobsites.
+									            You must submit all entries before logging out if you want to save your progress.
+									            Additionally, "sessions" are designed to expire after a period of time. After a session expires you will be required to log in again.
+									            It is encouraged that if your computer is around others or your computer is shared that you logout after you are done using <b>KWIX</b>.
+									        </p>
+									        <h2 style="text-decoration: underline;" id="employees">Employees</h2>
+									        <h3>Manage Employees</h3>
+									        <p>When navigating to the "Employees" page an authorized user can do the following:</p>
+									        <ul>
+									            <li>View all employees</li>
+									            <li>Add new employees</li>
+									            <li>Make changes to existing Employees</li>
+									            <li>Remove inactive employees</li>
+									        </ul>
+									        <h4>Add Employee</h4>
+									        <p>
+									            To add a new employee, simply fill out the form and click 'Add Employee'. 
+									            This will record the values entered into the form and create a new employee and save that employee to the <b>KWIX</b> employee database.
+									            Be sure to enter all values correctly.
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/fj72awmy" loading="lazy" />
+									        <p>
+									            A <b>First Name</b> and a <b>Last Name</b> must be entered into their respective fields.
+									            <b>First Name</b> and <b>Last Name</b> must only contain alphabetic characters. An error will appear if numeric values (0-9) are entered.
+									        </p>
+									        <p>
+									            A <b>Phone</b> number must be provided to create a unique ID for the employee. ID's are important as this allows <b><b>KWIX</b></b> to find employees quickly.
+									            Providing a <b>Phone</b> number also makes it easy to contact an individual employee easily.
+									        </p>
+									        <p>
+									            <b>Pay</b> must be entered. <b>Pay</b> is an employees hourly wage 
+									            (if jobsite is 'Contract' then the hourly pay will be overwritten, more on this in the Jobsites section).
+									            This can be updated along with each of the fields mentioned previously.
+									        </p>
+									        <h4>Edit Employee</h4>
+									        <p>
+									            To edit an <b>Employee's</b> information, just click the "pencil" icon.
+									            This will take the user to a page for specifically editing data related to the employee.
+									            Each of the fields
+									            <ul>
+									                <li>First Name</li>
+									                <li>Last Name</li>
+									                <li>Phone</li>
+									                <li>Pay</li>
+									            </ul>
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/5xemb7u9" loading="lazy" />
+									        <p>
+									            To <b>update</b> an employee's information you can change any of these fields and when the <b>update</b> button is clicked then you will be returned to the "Manage Employees" page with the updated employee information.
+									            Each of the fields have the same constraints as the <b>Manage Employees</b> page.
+									            An error message will appear if a value was entered incorrectly, and the employee will not be updated.
+									        </p>
+									        <p>
+									            If the fields are edited and the <b>Reset</b> button is clicked then each of the fields will be <b>Reset</b> to how they originally were when the employee was created or last updated.
+									            You can also click the "<-" next to the employee's name to return to the previous page.
+									        </p>
+									        <p>
+									            To <b>delete</b> an employee, simply click the <b>delete</b> button and the employee will be set to 'inactive'.
+									            When the employee is set to "inactive" they will be moved to the <b>recently deleted</b> page.
+									        </p>
+									        <h4>Recently Deleted Employees Page</h4>
+									        <p>
+									            Clicking the <b>recently deleted</b> link will take the user to the <b>recently deleted</b> page.
+									            Here you have two options. <b>Restore</b> or <b>Delete</b>. Clicking <b>Restore</b> will set the employee back to "active" and then they can be seen again on the "Manage Employees" page.
+									            Clicking <b>Delete</b> will <b>PERMANENTLY</b> delete the employee from the database. This is a permanent action and the employee will be gone forever.
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/mr3eku37" loading="lazy" />
+									        <p>
+									            As you get familiar with <b>KWIX</b> and all of the pages you'll begin to notice that they are all quite similar.
+									        </p>
+									        <h2 id="payroll" style="text-decoration: underline;">Payroll</h2>
+									        <h3>Manage Payroll</h3>
+									        <p>When navigating to the "payroll" page an authorized user can do the following:</p>
+									        <ul>
+									            <li>View all employees</li>
+									            <li>Add new paystubs</li>
+									            <li>Make changes to existing paystubs</li>
+									            <li>Remove inactive paystubs</li>
+									            <li>Export paystub data as CSV file.</li>
+									        </ul>
+											<img class="help-imgs" src="https://tinyurl.com/3wesdnna" loading="lazy" />
+									        <p>
+									            What is a <b>paystub?</b> A <b>paystub</b> is a record for the hours worked and gross pay for a given day of the week.
+									            Each paystub has its unique ID.
+									        </p>
+									        <h4>Add Paystub</h4>
+									        <p>
+									            The "Manage Payroll" page shows all "active" paystubs as well as all "active" employees.
+									            To view "deleted" or "inactive" paystubs click the <b>Recently Deleted</b> link.
+									        </p>
+									        <p>
+									            To record hours worked by an employee, click the "+" sign in the <b>Add Hours</b> column in the <b>Employees:</b> table.
+									            If you would like to to view employee info and make changes you can click the "employee id" link and you will be redirected to the "edit employee" page for the selected employee.
+									        </p>
+									        <p>
+									            Clicking the "+" sign will redirect you to the <b>Manage Paystubs For [Employee]</b> employee page. Here you can see all recorded paystubs for an employee.
+									            Additionally their <b>Total Hours</b> worked and <b>Total Gross Pay</b> (pay before tax) will be calculated and shown.
+									        </p>
+									        <p>
+									            To record hours worked the following fields must be filled out:
+									            <ul>
+									                <li>Select Jobsite</li>
+									                <li>Horly Pay</li>
+									                <li>Hours Worked</li>
+									                <li>Day</li>
+									            </ul>
+									        </p>
+									        <p>
+									            To create a paystub, a <b>Jobsite</b> must be selected, <b>Hourly Pay</b> must be entered, <b>Hours Worked</b> must be entered, and <b>Day</b> worked must be entered as "mm/dd/yyyy" i.e 01/01/2000. DO NOT DEVIATE FROM THIS.
+									            Once all fields have been entered correctly, clicking the <b>Add</b> button will create a paystub for said employee.
+									        </p>
+									        <p>
+									            Clicking the <b>Reset</b> button will reset the page and cancel the new record.
+									            If a field contains "junk" data or a bad input an error will be displayed.
+									        </p>
+									        <p>
+									            You'll notice that <b>Employee ID</b>, <b>Full Name</b>, <b>Hourly Pay</b> fields are already filled with data. This is data brought in from the employee's record.
+									            In other words it is data that was entered when the employee was created.
+									        </p>
+									        <p>
+									            <b>Employee ID</b>, <b>Full Name</b>, <b>Hourly Pay</b> fields are read-only, they cannot be edited, with the exception of <b>Hourly Pay</b>.
+									            Hourly Pay is set when the employee is added to the database. 
+									            This value can be changed when creating a paystub because a jobsite may create conditions in which additional pay is awarded, in otherwords this page was designed to give <b>Hourly Pay</b> flexibility when recording pay and time worked.
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/5frdy3d6" loading="lazy" />
+									        <h4>Edit Paystub</h4>
+									        <p>
+									            To edit a <b>paystub</b> click the "pencil" icon in the edit column. This can be done from the <b>Manage Payroll</b> page and the <b>Manage Paystubs For</b> employee page.
+									            Regardless of which page, clicking the "pencil" icon will redirect you to the edit page for the selected paystub.
+									            This is the <b>Paystub For [Day], [Date] | [Employee]</b> page.
+									            The following fields can be edited:
+									            <ul>
+									                <li>Select Jobsite</li>
+									                <li>Pay</li>
+									                <li>Hours Worked</li>
+									                <li>Day</li>
+									            </ul>
+									            To save changes, click the <b>Update</b> button.
+									            Clicking the <b>Reset</b> button will clear all edited fields and return them as they were.
+									            Clicking the <b>Delete</b> button will send the current pay stub to <b>Recently Deleted</b> page.
+									        </p>
+									        <p>
+									            If you wish to view the employee that "owns" this paystub refer to the table at the bottom of the page and click the <b>Employee</b> link.
+									            Additionally, the saved <b>Jobsite</b>, <b>Pay</b>, <b>Hours Worked</b>, and <b>Gross Pay</b> for the selected paystub will be shown.
+									        </p>
+									        <h4>Recently Deleted Paystubs Page</h4>
+									        <p>
+									            Clicking the <b>Recently Deleted</b> link will take the user to the <b>Recently Deleted</b> Paystubs page.
+									            Here you have two options. <b>Restore</b> or <b>Delete</b>. Clicking <b>Restore</b> will set the employee back to "active" and then they can be seen again on the "Manage Payroll" page.
+									            
+									        </p>
+									        <p>
+									            Clicking <b>Delete</b> will <b>PERMANENTLY</b> delete the paystub from the database. This is a permanent action and the paystub will be gone forever, but the employee will remain untouched.
+									            Only the paystub will be deleted forever.
+									        </p>
+									        <h4>Export</h4>
+									        <p>
+									            Clicking the <b>Export</b> button will retrieve all paystub records from the payroll database, organize all records into rows, and download all data as a (dot)CSV file.
+									            (dot)CSV files are compatible with all spreadsheet software (google sheets, excel, etc). Using your spreadsheet software of choice, you can then save the CSV file as whichever file you please.
+									        </p>
+									        <p>
+									            Open the CSV file in your spreadsheet software, then click file -> save as -> give the file a name -> click save.
+									        </p>
+									        <h2 style="text-decoration: underline;" id="jobsites">Jobsites</h2>
+									        <h3>Manage Jobsites:</h3>
+									        <p>
+									            When navigating to <b>Jobsites</b> you can do the following:
+									            <ul>
+									                <li>Create New Jobsites</li>
+									                <li>View Existing Jobsites</li>
+									                <li>Modify Existing Jobsites</li>
+									                <li>Permanently Remove Inactive Jobsites</li>
+									            </ul>
+									        </p>
+									        <h4>Add Jobsite</h4>
+									        <p>
+									            To create a new jobsite data must be entered into the following fields:
+									            <ul>
+									                <li>Jobsite Name</li>
+									                <li>Contract Job?</li>
+									            </ul>
+									            A jobsite name must be provided, usually it is the name of the street the jobsite is located on.
+									            It must be declared if the jobsite is a <b>Contract Job</b> or not.
+									            Contract jobs have a fixed pay and will override an employees hourly wage when creating a paystub associated with that job.
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/3t723rz4" loading="lazy" />
+									        <p>
+									            Once these fields have been filled out correctly, to add the jobsite to the <b>KWIX</b> database click <b>Add Jobsite</b>.
+									            Clicking <b>Reset</b> will clear all fields and restore the form as it was.
+									        </p>
+									        <h4>Edit Jobsites</h4>
+									        <p>
+									            To edit a jobsite, click the "pencil" icon.
+									            You will be redirected to the <b>Manage [Jobsite Name]</b> page.
+									            Here you can edit the following:
+									            <ul>
+									                <li>Jobsite Name</li>
+									                <li>Contract Job</li>
+									            </ul>
+									            To save your changes click <b>Update</b> button.
+									            To delete this jobsite click <b>Delete</b> button and the jobsite will be set to inactive.
+									            To cancel all changes click <b>Reset</b> and everything will be reset to how it was.
+									        </p>
+											<img class="help-imgs" src="https://tinyurl.com/yveympef" loading="lazy" />
+									        <h4>Recently Deleted Jobsite</h4>
+									        <p>
+									            Clicking <b>Recently Deleted</b> on the jobsites page will redirect you to the <b>Recently Deleted Jobsites</b> page that shows all "inactive" jobsites.
+									            To <b>PERMANENTLY</b> delete a jobsite, click the <b>delete</b> button. Doing this is will remove the jobsite from the database forever.
+									            To restore the jobsite and set it back to "active", click the <b>restore</b> button. If restored, the jobsite will be visible again on the <b>Manage Jobsite</b> page.
+									        </p>
+											<h2 style="text-decoration: underline;" id="search">Search</h2>
+											<h3>Searching for Records:</h3>
+											<p>When navigating to the search page you can do the following:</p>
+											<ul>
+												<li>Select tables to include in your search.</li>
+												<li>Select columns that you would like to include in your search.</li>
+												<li>View <b>Employees</b>,<b> Paystubs</b>, and <b>Jobsites</b> returned in your search.</li>
+											</ul>
+											<h3>Functionality:</h3>
+											<p>The search page was added to include the ability to create robust and complex searches.</p>
+											<p>For Example:</p>
+											<ul>
+												<li>Search for all paystubs related to a specific job, or search for all employees assigned to a specific job.</li>
+												<li>Search for records using a range of dates. i.e. from 08/15/2024 to 12/20/2024</li>
+											</ul>
+											<p>
+												These are just a few examples. The search page will be a powerful tool for managing records.
+												A nice feature, is that you can search for deleted records, so long as they have not been
+												permanetly deleted. This can be accomplished by using the status button and selecting "active"
+												or "deleted".
+											</p>
+											<p>
+												To use a table in the search simply check the tables you want to search in.
+												You can select one or many.
+											</p>
+											<ul><b>Tip</b>: use all of the tables in combination for robust search results.</ul>
+											<p>Completing a search:</p>
+											<ul>
+												<li>Select tables using the checkboxes</li>
+												<li>Select the columns you want to bring in</li>	
+												<li>Type in the value you want to search by or use the "any" button</li>
+												<li>Using "any" will bring in all values related to that column</li>
+												<li>Click search and the result will match the inputs you selected</li>
+											</ul>
+											<img class="help-imgs" src="https://tinyurl.com/yva2vx3r" loading="lazy" />
+											<p><b>Preventing Problems:</b></p>
+											<p>
+												Once you select a table and select a column you must enter a value or use the "any" button.
+												You cannot leave a field blank once you have selected it.
+												If you decided you don't want to search by that field, just click the column button again
+												and it will go away.
+											</p>
+											<p><b>"Status" and "Contract?"</b></p>
+											<p>
+												These fields are special because they do not take text values.
+												You must select "yes" or "no". These are radio buttons.
+												Radio buttons only allow you to select one or the other.
+												Once you select a radio button you cannot unselect it.
+												If you want to "unselect" a radio button you must click the "reset" button below.
+												Keep in mind clicking "reset" will reset the entire page.
+											</p>
+											<p>Example:</p>
+											<img class="help-imgs" src="https://tinyurl.com/3t6ypt6a" loading="lazy" />
+								</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+		<script th:src="@{/js/navComponent.js}"></script>
+		<script th:src="@{/js/handleReturn.js}"></script>
+	</body>
+</html>

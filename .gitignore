@@ -75,6 +75,8 @@ overridedb.*
 target
 .flattened-pom.xml
 secrets.yml
+secrets.properties
+*.properties
 .gradletasknamecache
 .sts4-cache
 .git-hooks/

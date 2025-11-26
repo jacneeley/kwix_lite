@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Controller;
 
 import local.payrollapp.simplepayroll.SimplePayroll;
@@ -51,13 +50,14 @@ public class EmployeeController {
 	
 	public EmployeeResponse createEmployee(EmployeeRequest request) {
 		Employee newEmp = new Employee(
-				request.getfirstName(),
-				request.getlastName(),
+				this.formatNames(request.getfirstName()),
+				this.formatNames(request.getlastName()),
 				request.getPhone(),
 				request.getPay(),
 				Boolean.TRUE,
 				LocalDate.now(),
 				LocalDate.now());
+		newEmp.generateId();
 		_empSrv.createEmp(newEmp);
 		EmployeeResponse response = getResponse(newEmp);
 		return response;
@@ -101,6 +101,11 @@ public class EmployeeController {
 		}
 	}
 	
+	public void clear() {
+		this._empSrv.clear();
+	}
+	
+	/* utilities */
 	private EmployeeResponse getResponse(Employee employee) {
 		EmployeeResponse empResponse = new EmployeeResponse(
 				employee.getId(),
@@ -117,6 +122,13 @@ public class EmployeeController {
 	public String formatedDate(LocalDate date) {
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
 		return date.format(df);
+	}
+	
+	private String formatNames(String name) {
+		char[] nameArr = name.toCharArray();
+		String firstChar = Character.toString(nameArr[0]).toUpperCase();
+		nameArr[0] = firstChar.charAt(0);
+		return new String(nameArr);
 	}
 	
 //	public Employee FindByName(String fullName) {
