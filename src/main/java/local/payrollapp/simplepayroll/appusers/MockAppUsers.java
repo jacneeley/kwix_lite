@@ -2,6 +2,7 @@ package local.payrollapp.simplepayroll.appusers;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +27,17 @@ public class MockAppUsers {
 	public MockAppUsers() {}
 	
 	public String getUserCredentialDetails(String tmpId) {
+		
+		if(Optional.ofNullable(this.userCredentials.get(tmpId)).isEmpty()) {
+			String err = new StringBuilder().append("no user: ").append(tmpId).toString();
+			log.error(err);
+			return GlobalConstants.EMPTY_STR;
+		}
+		
 		Object[] userDetails = this.userCredentials.get(tmpId);
 		if(!(userDetails[1] instanceof Instant)) {
-			Exception ex = new Exception("userDetails[1] was not an instancecof 'Instant'.");
-			log.error(ex.getMessage());
-			return "";
+			log.error("userDetails[1] was not an instancecof 'Instant'.");
+			return GlobalConstants.EMPTY_STR;
 		}
 		
 		Instant expiration = (Instant) userDetails[1];
@@ -38,7 +45,7 @@ public class MockAppUsers {
 			return userDetails[0].toString();
 		}
 		this.userCredentials.remove(tmpId);
-		this.tmpUser = "";
+		this.tmpUser = GlobalConstants.EMPTY_STR;;
 		return GlobalConstants.EXPIRED;
 	}
 	

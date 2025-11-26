@@ -11,4 +11,6 @@ public class GlobalConstants {
 	public static final String NONE = "none";
 	
 	public static final String EXPIRED = "Link has expired...";
+	
+	public static final String EMPTY_STR = "";
 }
